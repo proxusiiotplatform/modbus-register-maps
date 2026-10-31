@@ -1,0 +1,51 @@
+name: community
+
+# Greets first-time contributors and thanks people when their map is merged.
+# pull_request_target runs with this repository's token, so these jobs never check out or run pull request code.
+on:
+  issues:
+    types: [opened]
+  pull_request_target:
+    types: [opened, closed]
+
+permissions:
+  issues: write
+  pull-requests: write
+
+jobs:
+  welcome:
+    if: github.event.action == 'opened'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/first-interaction@v1
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          issue-message: |
+            Thanks for opening your first issue here. If it's a device request, a link to the vendor's Modbus
+            register document is the most helpful thing you can add; anyone with the device can then pick it up.
+          pr-message: |
+            Thanks for your first pull request. The `check` job validates the map and lists anything to fix in its
+            summary. [CONTRIBUTING.md](https://github.com/${{ github.repository }}/blob/main/CONTRIBUTING.md)
+            explains the addressing convention, which is where most first maps need a tweak.
+
+  merged:
+    if: github.event.action == 'closed' && github.event.pull_request.merged
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+            const files = await github.paginate(github.rest.pulls.listFiles, {
+              owner: context.repo.owner, repo: context.repo.repo, pull_number: pr.number,
+            });
+            const maps = files.filter(f => /^devices\/[^/]+\/[^/]+\.yaml$/.test(f.filename) && f.status !== 'removed');
+            if (maps.length === 0) return;
+            const links = maps
+              .map(f => `- [${f.filename}](https://github.com/${context.repo.owner}/${context.repo.repo}/blob/main/${f.filename})`)
+              .join('\n');
+            await github.rest.issues.createComment({
+              owner: context.repo.owner, repo: context.repo.repo, issue_number: pr.number,
+              body: `Merged, thank you @${pr.user.login}. These maps are now part of the collection:\n\n${links}\n\n` +
+                'If you have one of these devices, a hardware verification (see CONTRIBUTING.md) is the next most useful step.',
+            });

@@ -1,0 +1,335 @@
+# Transcribed from Eastron's protocol document; not yet checked against a meter.
+schema_version: 1
+vendor: Eastron
+model: SDM120-Modbus
+aliases: [SDM120, SDM120M, SDM120Modbus]
+category: energy-meter
+summary: Single-phase DIN-rail energy meter with RS485 Modbus RTU; every measured value is a 32-bit float.
+connection:
+  interfaces: [rtu]
+  default_unit_id: 1
+  default_byte_order: ABCD
+  serial_defaults: 2400 baud, 8 data bits, no parity, 1 stop bit
+  notes:
+    - Read and write floats in register pairs; an odd start address or count returns an exception.
+    - Broadcast (address 0) is not supported.
+    - The SDM120CT variants use a different protocol document; check yours before relying on this map.
+sources:
+  - title: Eastron SDM120Modbus Smart Meter Modbus Protocol Implementation
+    publisher: Eastron
+    version: V2.4
+    url: https://cdn.shopify.com/s/files/1/0418/3749/4423/files/Eastron_SDM120_Sereis_Electricity_Meters_MODBUS_Protocol.pdf
+    notes: Copy hosted by an Eastron reseller.
+registers:
+  - key: voltage
+    name: "Voltage"
+    group: voltage
+    table: input
+    address: 0
+    type: float32
+    unit: "V"
+    access: r
+
+  - key: current
+    name: "Current"
+    group: current
+    table: input
+    address: 6
+    type: float32
+    unit: "A"
+    access: r
+
+  - key: active_power
+    name: "Active power"
+    group: power
+    table: input
+    address: 12
+    type: float32
+    unit: "W"
+    access: r
+
+  - key: apparent_power
+    name: "Apparent power"
+    group: power
+    table: input
+    address: 18
+    type: float32
+    unit: "VA"
+    access: r
+
+  - key: reactive_power
+    name: "Reactive power"
+    group: power
+    table: input
+    address: 24
+    type: float32
+    unit: "var"
+    access: r
+
+  - key: power_factor
+    name: "Power factor"
+    group: power
+    table: input
+    address: 30
+    type: float32
+    access: r
+
+  - key: frequency
+    name: "Frequency"
+    group: voltage
+    table: input
+    address: 70
+    type: float32
+    unit: "Hz"
+    access: r
+
+  - key: import_active_energy
+    name: "Import active energy"
+    group: energy
+    table: input
+    address: 72
+    type: float32
+    unit: "kWh"
+    access: r
+
+  - key: export_active_energy
+    name: "Export active energy"
+    group: energy
+    table: input
+    address: 74
+    type: float32
+    unit: "kWh"
+    access: r
+
+  - key: import_reactive_energy
+    name: "Import reactive energy"
+    group: energy
+    table: input
+    address: 76
+    type: float32
+    unit: "kvarh"
+    access: r
+
+  - key: export_reactive_energy
+    name: "Export reactive energy"
+    group: energy
+    table: input
+    address: 78
+    type: float32
+    unit: "kvarh"
+    access: r
+
+  - key: active_power_demand
+    name: "Total system power demand"
+    group: demand
+    table: input
+    address: 84
+    type: float32
+    unit: "W"
+    access: r
+
+  - key: active_power_demand_max
+    name: "Maximum total system power demand"
+    group: demand
+    table: input
+    address: 86
+    type: float32
+    unit: "W"
+    access: r
+
+  - key: import_power_demand
+    name: "Import system power demand"
+    group: demand
+    table: input
+    address: 88
+    type: float32
+    unit: "W"
+    access: r
+
+  - key: import_power_demand_max
+    name: "Maximum import system power demand"
+    group: demand
+    table: input
+    address: 90
+    type: float32
+    unit: "W"
+    access: r
+
+  - key: export_power_demand
+    name: "Export system power demand"
+    group: demand
+    table: input
+    address: 92
+    type: float32
+    unit: "W"
+    access: r
+
+  - key: export_power_demand_max
+    name: "Maximum export system power demand"
+    group: demand
+    table: input
+    address: 94
+    type: float32
+    unit: "W"
+    access: r
+
+  - key: current_demand
+    name: "Current demand"
+    group: demand
+    table: input
+    address: 258
+    type: float32
+    unit: "A"
+    access: r
+
+  - key: current_demand_max
+    name: "Maximum current demand"
+    group: demand
+    table: input
+    address: 264
+    type: float32
+    unit: "A"
+    access: r
+
+  - key: active_energy_total
+    name: "Total active energy"
+    group: energy
+    table: input
+    address: 342
+    type: float32
+    unit: "kWh"
+    access: r
+
+  - key: reactive_energy_total
+    name: "Total reactive energy"
+    group: energy
+    table: input
+    address: 344
+    type: float32
+    unit: "kvarh"
+    access: r
+
+  - key: relay_pulse_width
+    name: "Relay pulse width"
+    group: setup
+    table: holding
+    address: 12
+    type: float32
+    unit: "ms"
+    access: rw
+    description: "60, 100 or 200 ms, default 100."
+
+  - key: network_parity_stop
+    name: "Network parity and stop bits"
+    group: setup
+    table: holding
+    address: 18
+    type: float32
+    access: rw
+    values:
+      "0": "1 stop bit, no parity"
+      "1": "1 stop bit, even parity"
+      "2": "1 stop bit, odd parity"
+      "3": "2 stop bits, no parity"
+    notes: "Takes effect after a restart. Default 0."
+
+  - key: meter_id
+    name: "Modbus node address"
+    group: setup
+    table: holding
+    address: 20
+    type: float32
+    access: rw
+    description: "1 to 247, default 1."
+
+  - key: network_baud_rate
+    name: "Network baud rate"
+    group: setup
+    table: holding
+    address: 28
+    type: float32
+    access: rw
+    values:
+      "0": "2400"
+      "1": "4800"
+      "2": "9600"
+      "5": "1200"
+    notes: "Default 0 (2400)."
+
+  - key: pulse1_output_mode
+    name: "Pulse 1 output mode"
+    group: setup
+    table: holding
+    address: 86
+    type: float32
+    access: rw
+    values:
+      "1": "Import active energy"
+      "2": "Import + export active energy"
+      "4": "Export active energy"
+      "5": "Import reactive energy"
+      "6": "Import + export reactive energy"
+      "8": "Export reactive energy"
+    notes: "Default 4."
+
+  - key: scroll_display_time
+    name: "Scroll display time"
+    group: setup
+    table: holding
+    address: 63744
+    type: uint16
+    unit: "s"
+    access: rw
+    description: "0 to 30 s. 0, the default, turns scrolling off."
+
+  - key: pulse1_constant
+    name: "Pulse 1 output constant"
+    group: setup
+    table: holding
+    address: 63760
+    type: uint16
+    access: rw
+    values:
+      "0": "0.001 kWh/imp"
+      "1": "0.01 kWh/imp"
+      "2": "0.1 kWh/imp"
+      "3": "1 kWh/imp"
+    notes: "Default 0."
+
+  - key: measurement_mode
+    name: "Measurement mode"
+    group: setup
+    table: holding
+    address: 63776
+    type: uint16
+    access: rw
+    values:
+      "1": "Total = import"
+      "2": "Total = import + export"
+      "3": "Total = import - export"
+    notes: "Default 2."
+
+  - key: serial_number
+    name: "Serial number"
+    group: setup
+    table: holding
+    address: 64512
+    type: uint32
+    access: r
+
+  - key: meter_code
+    name: "Meter code"
+    group: setup
+    table: holding
+    address: 64514
+    type: uint16
+    access: r
+    description: "0x0020 for the SDM120."
+
+  - key: software_version
+    name: "Software version"
+    group: setup
+    table: holding
+    address: 64515
+    type: uint16
+    access: r

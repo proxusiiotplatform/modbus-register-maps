@@ -1,0 +1,32 @@
+name: Device request
+description: Ask for a device's register map to be added.
+title: "Device request: <vendor> <model>"
+labels: [device-request]
+body:
+  - type: input
+    id: device
+    attributes:
+      label: Vendor and model
+      placeholder: Schneider Electric PM5110
+    validations:
+      required: true
+  - type: input
+    id: source
+    attributes:
+      label: Link to the vendor's Modbus register document
+      description: A public PDF or web page. Maps are transcribed only from public sources.
+      placeholder: https://
+    validations:
+      required: true
+  - type: dropdown
+    id: interface
+    attributes:
+      label: How do you connect to it?
+      multiple: true
+      options: [Modbus RTU (RS485), Modbus TCP, Through a gateway]
+  - type: checkboxes
+    id: help
+    attributes:
+      label: Can you help?
+      options:
+        - label: I have this device and can check a few registers once the map exists.

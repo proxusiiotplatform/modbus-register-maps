@@ -1,0 +1,157 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/proxusiiotplatform/modbus-register-maps/schema/device.schema.json",
+  "title": "Modbus register map",
+  "description": "One device model's Modbus register map. Addresses are zero-based protocol addresses, the value sent on the wire.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "vendor", "model", "category", "summary", "connection", "sources", "registers"],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "vendor": { "type": "string", "minLength": 1, "maxLength": 80 },
+    "model": { "type": "string", "minLength": 1, "maxLength": 80 },
+    "aliases": {
+      "description": "Other names the model is sold or searched under.",
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true
+    },
+    "category": {
+      "enum": ["energy-meter", "power-analyzer", "inverter", "battery", "vfd", "plc", "io-module", "sensor", "flow-meter", "controller", "gateway", "other"]
+    },
+    "summary": { "type": "string", "minLength": 10, "maxLength": 200 },
+    "connection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["interfaces"],
+      "properties": {
+        "interfaces": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "enum": ["rtu", "tcp", "ascii"] }
+        },
+        "default_unit_id": { "type": "integer", "minimum": 0, "maximum": 255 },
+        "default_byte_order": { "$ref": "#/$defs/byte_order" },
+        "max_registers_per_read": { "type": "integer", "minimum": 1, "maximum": 125 },
+        "serial_defaults": { "type": "string", "maxLength": 120 },
+        "notes": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+      }
+    },
+    "wiring_modes": {
+      "description": "Wiring or operating modes that registers can be limited to with applies_to.",
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["title", "publisher", "url"],
+        "properties": {
+          "title": { "type": "string", "minLength": 1 },
+          "publisher": { "type": "string", "minLength": 1 },
+          "version": { "type": "string" },
+          "url": { "type": "string", "pattern": "^https://" },
+          "notes": { "type": "string" }
+        }
+      }
+    },
+    "verified": {
+      "description": "Reads against real hardware. Maps without entries are transcribed from the sources only.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["by", "date", "registers"],
+        "properties": {
+          "by": { "type": "string", "pattern": "^@?[A-Za-z0-9-]+$" },
+          "date": { "type": "string", "format": "date", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+          "firmware": { "type": "string" },
+          "registers": {
+            "description": "Keys checked, or [\"all\"].",
+            "type": "array",
+            "minItems": 1,
+            "items": { "type": "string" }
+          },
+          "notes": { "type": "string" }
+        }
+      }
+    },
+    "registers": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/register" }
+    }
+  },
+  "$defs": {
+    "byte_order": {
+      "description": "Byte order of multi-register values, A being the most significant byte. ABCD is big-endian, CDAB swaps the 16-bit words.",
+      "enum": ["ABCD", "CDAB", "BADC", "DCBA"]
+    },
+    "register": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key", "name", "table", "address", "type", "access"],
+      "properties": {
+        "key": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$", "maxLength": 64 },
+        "name": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "group": { "type": "string", "minLength": 1, "maxLength": 40 },
+        "table": { "enum": ["coil", "discrete_input", "input", "holding"] },
+        "address": { "type": "integer", "minimum": 0, "maximum": 65535 },
+        "type": {
+          "enum": ["bool", "uint16", "int16", "uint32", "int32", "float32", "uint64", "int64", "float64", "string", "bitfield16"]
+        },
+        "length": {
+          "description": "Register count, required for string, implied for every other type.",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 125
+        },
+        "byte_order": { "$ref": "#/$defs/byte_order" },
+        "scale": {
+          "description": "Engineering value = raw value * scale.",
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "unit": { "type": "string", "minLength": 1, "maxLength": 16 },
+        "access": { "enum": ["r", "rw", "w"] },
+        "values": {
+          "description": "Meaning of enumerated raw values.",
+          "type": "object",
+          "patternProperties": { "^-?\\d+(\\.\\d+)?$": { "type": "string", "minLength": 1 } },
+          "additionalProperties": false
+        },
+        "applies_to": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string" }
+        },
+        "description": { "type": "string" },
+        "notes": { "type": "string" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "type": { "const": "string" } } },
+          "then": { "required": ["length"] }
+        },
+        {
+          "if": { "properties": { "table": { "enum": ["coil", "discrete_input"] } } },
+          "then": { "properties": { "type": { "const": "bool" } } }
+        },
+        {
+          "if": { "properties": { "type": { "const": "bool" } } },
+          "then": { "properties": { "table": { "enum": ["coil", "discrete_input"] } } }
+        },
+        {
+          "if": { "properties": { "table": { "enum": ["input", "discrete_input"] } } },
+          "then": { "properties": { "access": { "const": "r" } } }
+        }
+      ]
+    }
+  }
+}

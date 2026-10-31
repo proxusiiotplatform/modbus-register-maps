@@ -1,0 +1,975 @@
+# Transcribed from Eastron's protocol document; not yet checked against a meter.
+schema_version: 1
+vendor: Eastron
+model: SDM630-Modbus
+aliases: [SDM630, SDM630 V2, SDM630Modbus]
+category: energy-meter
+summary: Three-phase DIN-rail energy meter with RS485 Modbus RTU; every value is a 32-bit float.
+connection:
+  interfaces: [rtu]
+  default_unit_id: 1
+  default_byte_order: ABCD
+  max_registers_per_read: 80
+  serial_defaults: 9600 baud, 8 data bits, no parity, 1 stop bit
+  notes:
+    - Read and write registers in pairs; an odd start address or count returns an exception.
+    - Up to 40 values (80 registers) per request.
+    - Float word order can be reversed through the meter's register order setting; ABCD is the default.
+    - Parameters marked for other wiring modes read as zero.
+wiring_modes: [3P4W, 3P3W, 1P2W]
+sources:
+  - title: Eastron SDM630Modbus Smart Meter Modbus Protocol Implementation
+    publisher: Eastron
+    version: V1.8
+    url: https://communityarchive.victronenergy.com/storage/attachments/sdm630-modbus-protocol.pdf
+    notes: Copy hosted by the Victron community archive.
+registers:
+  - key: voltage_l1_n
+    name: "Phase 1 line to neutral voltage"
+    group: voltage
+    table: input
+    address: 0
+    type: float32
+    unit: "V"
+    access: r
+    applies_to: [3P4W, 1P2W]
+
+  - key: voltage_l2_n
+    name: "Phase 2 line to neutral voltage"
+    group: voltage
+    table: input
+    address: 2
+    type: float32
+    unit: "V"
+    access: r
+    applies_to: [3P4W]
+
+  - key: voltage_l3_n
+    name: "Phase 3 line to neutral voltage"
+    group: voltage
+    table: input
+    address: 4
+    type: float32
+    unit: "V"
+    access: r
+    applies_to: [3P4W]
+
+  - key: current_l1
+    name: "Phase 1 current"
+    group: current
+    table: input
+    address: 6
+    type: float32
+    unit: "A"
+    access: r
+
+  - key: current_l2
+    name: "Phase 2 current"
+    group: current
+    table: input
+    address: 8
+    type: float32
+    unit: "A"
+    access: r
+    applies_to: [3P4W, 3P3W]
+
+  - key: current_l3
+    name: "Phase 3 current"
+    group: current
+    table: input
+    address: 10
+    type: float32
+    unit: "A"
+    access: r
+    applies_to: [3P4W, 3P3W]
+
+  - key: active_power_l1
+    name: "Phase 1 active power"
+    group: power
+    table: input
+    address: 12
+    type: float32
+    unit: "W"
+    access: r
+    applies_to: [3P4W, 1P2W]
+
+  - key: active_power_l2
+    name: "Phase 2 active power"
+    group: power
+    table: input
+    address: 14
+    type: float32
+    unit: "W"
+    access: r
+    applies_to: [3P4W, 1P2W]
+
+  - key: active_power_l3
+    name: "Phase 3 active power"
+    group: power
+    table: input
+    address: 16
+    type: float32
+    unit: "W"
+    access: r
+    applies_to: [3P4W]
+
+  - key: apparent_power_l1
+    name: "Phase 1 apparent power"
+    group: power
+    table: input
+    address: 18
+    type: float32
+    unit: "VA"
+    access: r
+    applies_to: [3P4W, 1P2W]
+
+  - key: apparent_power_l2
+    name: "Phase 2 apparent power"
+    group: power
+    table: input
+    address: 20
+    type: float32
+    unit: "VA"
+    access: r
+    applies_to: [3P4W]
+
+  - key: apparent_power_l3
+    name: "Phase 3 apparent power"
+    group: power
+    table: input
+    address: 22
+    type: float32
+    unit: "VA"
+    access: r
+    applies_to: [3P4W]
+
+  - key: reactive_power_l1
+    name: "Phase 1 reactive power"
+    group: power
+    table: input
+    address: 24
+    type: float32
+    unit: "var"
+    access: r
+    applies_to: [3P4W, 1P2W]
+
+  - key: reactive_power_l2
+    name: "Phase 2 reactive power"
+    group: power
+    table: input
+    address: 26
+    type: float32
+    unit: "var"
+    access: r
+    applies_to: [3P4W]
+
+  - key: reactive_power_l3
+    name: "Phase 3 reactive power"
+    group: power
+    table: input
+    address: 28
+    type: float32
+    unit: "var"
+    access: r
+    applies_to: [3P4W]
+
+  - key: power_factor_l1
+    name: "Phase 1 power factor"
+    group: power
+    table: input
+    address: 30
+    type: float32
+    access: r
+    applies_to: [3P4W, 1P2W]
+    notes: "Sign gives the current direction: positive forward, negative reverse."
+
+  - key: power_factor_l2
+    name: "Phase 2 power factor"
+    group: power
+    table: input
+    address: 32
+    type: float32
+    access: r
+    applies_to: [3P4W]
+
+  - key: power_factor_l3
+    name: "Phase 3 power factor"
+    group: power
+    table: input
+    address: 34
+    type: float32
+    access: r
+    applies_to: [3P4W]
+
+  - key: phase_angle_l1
+    name: "Phase 1 phase angle"
+    group: power
+    table: input
+    address: 36
+    type: float32
+    unit: "deg"
+    access: r
+    applies_to: [3P4W, 1P2W]
+
+  - key: phase_angle_l2
+    name: "Phase 2 phase angle"
+    group: power
+    table: input
+    address: 38
+    type: float32
+    unit: "deg"
+    access: r
+    applies_to: [3P4W]
+
+  - key: phase_angle_l3
+    name: "Phase 3 phase angle"
+    group: power
+    table: input
+    address: 40
+    type: float32
+    unit: "deg"
+    access: r
+    applies_to: [3P4W]
+
+  - key: voltage_ln_avg
+    name: "Average line to neutral voltage"
+    group: voltage
+    table: input
+    address: 42
+    type: float32
+    unit: "V"
+    access: r
+    applies_to: [3P4W]
+
+  - key: current_avg
+    name: "Average line current"
+    group: current
+    table: input
+    address: 46
+    type: float32
+    unit: "A"
+    access: r
+
+  - key: current_sum
+    name: "Sum of line currents"
+    group: current
+    table: input
+    address: 48
+    type: float32
+    unit: "A"
+    access: r
+
+  - key: active_power_total
+    name: "Total system active power"
+    group: power
+    table: input
+    address: 52
+    type: float32
+    unit: "W"
+    access: r
+
+  - key: apparent_power_total
+    name: "Total system apparent power"
+    group: power
+    table: input
+    address: 56
+    type: float32
+    unit: "VA"
+    access: r
+
+  - key: reactive_power_total
+    name: "Total system reactive power"
+    group: power
+    table: input
+    address: 60
+    type: float32
+    unit: "var"
+    access: r
+
+  - key: power_factor_total
+    name: "Total system power factor"
+    group: power
+    table: input
+    address: 62
+    type: float32
+    access: r
+    notes: "Sign gives the current direction: positive forward, negative reverse."
+
+  - key: phase_angle_total
+    name: "Total system phase angle"
+    group: power
+    table: input
+    address: 66
+    type: float32
+    unit: "deg"
+    access: r
+
+  - key: frequency
+    name: "Supply frequency"
+    group: voltage
+    table: input
+    address: 70
+    type: float32
+    unit: "Hz"
+    access: r
+
+  - key: import_active_energy
+    name: "Total import active energy"
+    group: energy
+    table: input
+    address: 72
+    type: float32
+    unit: "kWh"
+    access: r
+
+  - key: export_active_energy
+    name: "Total export active energy"
+    group: energy
+    table: input
+    address: 74
+    type: float32
+    unit: "kWh"
+    access: r
+
+  - key: import_reactive_energy
+    name: "Total import reactive energy"
+    group: energy
+    table: input
+    address: 76
+    type: float32
+    unit: "kvarh"
+    access: r
+
+  - key: export_reactive_energy
+    name: "Total export reactive energy"
+    group: energy
+    table: input
+    address: 78
+    type: float32
+    unit: "kvarh"
+    access: r
+
+  - key: apparent_energy_total
+    name: "Total apparent energy"
+    group: energy
+    table: input
+    address: 80
+    type: float32
+    unit: "kVAh"
+    access: r
+
+  - key: charge_total
+    name: "Ampere-hours"
+    group: energy
+    table: input
+    address: 82
+    type: float32
+    unit: "Ah"
+    access: r
+
+  - key: active_power_demand
+    name: "Total system active power demand"
+    group: demand
+    table: input
+    address: 84
+    type: float32
+    unit: "W"
+    access: r
+    notes: "Demand is calculated for import minus export."
+
+  - key: active_power_demand_max
+    name: "Maximum total system active power demand"
+    group: demand
+    table: input
+    address: 86
+    type: float32
+    unit: "W"
+    access: r
+    notes: "The source table lists the unit as VA; the parameter is an active power demand."
+
+  - key: apparent_power_demand
+    name: "Total system apparent power demand"
+    group: demand
+    table: input
+    address: 100
+    type: float32
+    unit: "VA"
+    access: r
+
+  - key: apparent_power_demand_max
+    name: "Maximum total system apparent power demand"
+    group: demand
+    table: input
+    address: 102
+    type: float32
+    unit: "VA"
+    access: r
+
+  - key: neutral_current_demand
+    name: "Neutral current demand"
+    group: demand
+    table: input
+    address: 104
+    type: float32
+    unit: "A"
+    access: r
+    applies_to: [3P4W]
+
+  - key: neutral_current_demand_max
+    name: "Maximum neutral current demand"
+    group: demand
+    table: input
+    address: 106
+    type: float32
+    unit: "A"
+    access: r
+    applies_to: [3P4W]
+
+  - key: voltage_l1_l2
+    name: "Line 1 to line 2 voltage"
+    group: voltage
+    table: input
+    address: 200
+    type: float32
+    unit: "V"
+    access: r
+    applies_to: [3P4W, 3P3W]
+
+  - key: voltage_l2_l3
+    name: "Line 2 to line 3 voltage"
+    group: voltage
+    table: input
+    address: 202
+    type: float32
+    unit: "V"
+    access: r
+    applies_to: [3P4W, 3P3W]
+
+  - key: voltage_l3_l1
+    name: "Line 3 to line 1 voltage"
+    group: voltage
+    table: input
+    address: 204
+    type: float32
+    unit: "V"
+    access: r
+    applies_to: [3P4W, 3P3W]
+
+  - key: voltage_ll_avg
+    name: "Average line to line voltage"
+    group: voltage
+    table: input
+    address: 206
+    type: float32
+    unit: "V"
+    access: r
+    applies_to: [3P4W, 3P3W]
+
+  - key: current_neutral
+    name: "Neutral current"
+    group: current
+    table: input
+    address: 224
+    type: float32
+    unit: "A"
+    access: r
+    applies_to: [3P4W]
+
+  - key: thd_voltage_l1_n
+    name: "Phase 1 line to neutral voltage THD"
+    group: harmonics
+    table: input
+    address: 234
+    type: float32
+    unit: "%"
+    access: r
+    applies_to: [3P4W, 1P2W]
+
+  - key: thd_voltage_l2_n
+    name: "Phase 2 line to neutral voltage THD"
+    group: harmonics
+    table: input
+    address: 236
+    type: float32
+    unit: "%"
+    access: r
+    applies_to: [3P4W]
+
+  - key: thd_voltage_l3_n
+    name: "Phase 3 line to neutral voltage THD"
+    group: harmonics
+    table: input
+    address: 238
+    type: float32
+    unit: "%"
+    access: r
+    applies_to: [3P4W]
+
+  - key: thd_current_l1
+    name: "Phase 1 current THD"
+    group: harmonics
+    table: input
+    address: 240
+    type: float32
+    unit: "%"
+    access: r
+
+  - key: thd_current_l2
+    name: "Phase 2 current THD"
+    group: harmonics
+    table: input
+    address: 242
+    type: float32
+    unit: "%"
+    access: r
+    applies_to: [3P4W, 3P3W]
+
+  - key: thd_current_l3
+    name: "Phase 3 current THD"
+    group: harmonics
+    table: input
+    address: 244
+    type: float32
+    unit: "%"
+    access: r
+    applies_to: [3P4W, 3P3W]
+
+  - key: thd_voltage_ln_avg
+    name: "Average line to neutral voltage THD"
+    group: harmonics
+    table: input
+    address: 248
+    type: float32
+    unit: "%"
+    access: r
+    applies_to: [3P4W, 1P2W]
+
+  - key: thd_current_avg
+    name: "Average line current THD"
+    group: harmonics
+    table: input
+    address: 250
+    type: float32
+    unit: "%"
+    access: r
+
+  - key: current_demand_l1
+    name: "Phase 1 current demand"
+    group: demand
+    table: input
+    address: 258
+    type: float32
+    unit: "A"
+    access: r
+
+  - key: current_demand_l2
+    name: "Phase 2 current demand"
+    group: demand
+    table: input
+    address: 260
+    type: float32
+    unit: "A"
+    access: r
+    applies_to: [3P4W, 3P3W]
+
+  - key: current_demand_l3
+    name: "Phase 3 current demand"
+    group: demand
+    table: input
+    address: 262
+    type: float32
+    unit: "A"
+    access: r
+    applies_to: [3P4W, 3P3W]
+
+  - key: current_demand_max_l1
+    name: "Maximum phase 1 current demand"
+    group: demand
+    table: input
+    address: 264
+    type: float32
+    unit: "A"
+    access: r
+
+  - key: current_demand_max_l2
+    name: "Maximum phase 2 current demand"
+    group: demand
+    table: input
+    address: 266
+    type: float32
+    unit: "A"
+    access: r
+    applies_to: [3P4W, 3P3W]
+
+  - key: current_demand_max_l3
+    name: "Maximum phase 3 current demand"
+    group: demand
+    table: input
+    address: 268
+    type: float32
+    unit: "A"
+    access: r
+    applies_to: [3P4W, 3P3W]
+
+  - key: thd_voltage_l1_l2
+    name: "Line 1 to line 2 voltage THD"
+    group: harmonics
+    table: input
+    address: 334
+    type: float32
+    unit: "%"
+    access: r
+    applies_to: [3P4W, 3P3W]
+
+  - key: thd_voltage_l2_l3
+    name: "Line 2 to line 3 voltage THD"
+    group: harmonics
+    table: input
+    address: 336
+    type: float32
+    unit: "%"
+    access: r
+    applies_to: [3P4W, 3P3W]
+
+  - key: thd_voltage_l3_l1
+    name: "Line 3 to line 1 voltage THD"
+    group: harmonics
+    table: input
+    address: 338
+    type: float32
+    unit: "%"
+    access: r
+    applies_to: [3P4W, 3P3W]
+
+  - key: thd_voltage_ll_avg
+    name: "Average line to line voltage THD"
+    group: harmonics
+    table: input
+    address: 340
+    type: float32
+    unit: "%"
+    access: r
+    applies_to: [3P4W, 3P3W]
+
+  - key: active_energy_total
+    name: "Total active energy (import + export)"
+    group: energy
+    table: input
+    address: 342
+    type: float32
+    unit: "kWh"
+    access: r
+
+  - key: reactive_energy_total
+    name: "Total reactive energy (import + export)"
+    group: energy
+    table: input
+    address: 344
+    type: float32
+    unit: "kvarh"
+    access: r
+
+  - key: import_active_energy_l1
+    name: "Phase 1 import active energy"
+    group: energy
+    table: input
+    address: 346
+    type: float32
+    unit: "kWh"
+    access: r
+
+  - key: import_active_energy_l2
+    name: "Phase 2 import active energy"
+    group: energy
+    table: input
+    address: 348
+    type: float32
+    unit: "kWh"
+    access: r
+
+  - key: import_active_energy_l3
+    name: "Phase 3 import active energy"
+    group: energy
+    table: input
+    address: 350
+    type: float32
+    unit: "kWh"
+    access: r
+
+  - key: export_active_energy_l1
+    name: "Phase 1 export active energy"
+    group: energy
+    table: input
+    address: 352
+    type: float32
+    unit: "kWh"
+    access: r
+
+  - key: export_active_energy_l2
+    name: "Phase 2 export active energy"
+    group: energy
+    table: input
+    address: 354
+    type: float32
+    unit: "kWh"
+    access: r
+
+  - key: export_active_energy_l3
+    name: "Phase 3 export active energy"
+    group: energy
+    table: input
+    address: 356
+    type: float32
+    unit: "kWh"
+    access: r
+
+  - key: active_energy_total_l1
+    name: "Phase 1 total active energy (import + export)"
+    group: energy
+    table: input
+    address: 358
+    type: float32
+    unit: "kWh"
+    access: r
+
+  - key: active_energy_total_l2
+    name: "Phase 2 total active energy (import + export)"
+    group: energy
+    table: input
+    address: 360
+    type: float32
+    unit: "kWh"
+    access: r
+
+  - key: active_energy_total_l3
+    name: "Phase 3 total active energy (import + export)"
+    group: energy
+    table: input
+    address: 362
+    type: float32
+    unit: "kWh"
+    access: r
+
+  - key: import_reactive_energy_l1
+    name: "Phase 1 import reactive energy"
+    group: energy
+    table: input
+    address: 364
+    type: float32
+    unit: "kvarh"
+    access: r
+
+  - key: import_reactive_energy_l2
+    name: "Phase 2 import reactive energy"
+    group: energy
+    table: input
+    address: 366
+    type: float32
+    unit: "kvarh"
+    access: r
+
+  - key: import_reactive_energy_l3
+    name: "Phase 3 import reactive energy"
+    group: energy
+    table: input
+    address: 368
+    type: float32
+    unit: "kvarh"
+    access: r
+
+  - key: export_reactive_energy_l1
+    name: "Phase 1 export reactive energy"
+    group: energy
+    table: input
+    address: 370
+    type: float32
+    unit: "kvarh"
+    access: r
+
+  - key: export_reactive_energy_l2
+    name: "Phase 2 export reactive energy"
+    group: energy
+    table: input
+    address: 372
+    type: float32
+    unit: "kvarh"
+    access: r
+
+  - key: export_reactive_energy_l3
+    name: "Phase 3 export reactive energy"
+    group: energy
+    table: input
+    address: 374
+    type: float32
+    unit: "kvarh"
+    access: r
+
+  - key: reactive_energy_total_l1
+    name: "Phase 1 total reactive energy (import + export)"
+    group: energy
+    table: input
+    address: 376
+    type: float32
+    unit: "kvarh"
+    access: r
+
+  - key: reactive_energy_total_l2
+    name: "Phase 2 total reactive energy (import + export)"
+    group: energy
+    table: input
+    address: 378
+    type: float32
+    unit: "kvarh"
+    access: r
+
+  - key: reactive_energy_total_l3
+    name: "Phase 3 total reactive energy (import + export)"
+    group: energy
+    table: input
+    address: 380
+    type: float32
+    unit: "kvarh"
+    access: r
+
+  - key: demand_period
+    name: "Demand period"
+    group: setup
+    table: holding
+    address: 2
+    type: float32
+    unit: "min"
+    access: rw
+    description: "0, 5, 8, 10, 15, 20, 30 or 60 minutes, default 60. 0 makes demand follow the present value."
+
+  - key: system_type
+    name: "System type"
+    group: setup
+    table: holding
+    address: 10
+    type: float32
+    access: rw
+    values:
+      "1": "1P2W"
+      "2": "3P3W"
+      "3": "3P4W"
+    notes: "Password protected: write the password register first."
+
+  - key: pulse1_width
+    name: "Pulse 1 width"
+    group: setup
+    table: holding
+    address: 12
+    type: float32
+    unit: "ms"
+    access: rw
+    description: "60, 100 or 200 ms, default 100."
+
+  - key: password_lock
+    name: "Password lock"
+    group: setup
+    table: holding
+    address: 14
+    type: float32
+    access: rw
+    values:
+      "0": "Locked"
+      "1": "Unlocked"
+    description: "Reading resets the password timeout to one minute; writing any value locks again."
+    notes: "The source lists the mode as read-only but describes the write that relocks."
+
+  - key: network_parity_stop
+    name: "Network parity and stop bits"
+    group: setup
+    table: holding
+    address: 18
+    type: float32
+    access: rw
+    values:
+      "0": "1 stop bit, no parity"
+      "1": "1 stop bit, even parity"
+      "2": "1 stop bit, odd parity"
+      "3": "2 stop bits, no parity"
+    notes: "Takes effect after a restart. Default 0."
+
+  - key: network_node
+    name: "Modbus node address"
+    group: setup
+    table: holding
+    address: 20
+    type: float32
+    access: rw
+    description: "1 to 247, default 1."
+    notes: "Takes effect after a restart."
+
+  - key: pulse1_divisor
+    name: "Pulse 1 divisor"
+    group: setup
+    table: holding
+    address: 22
+    type: float32
+    access: rw
+    values:
+      "0": "0.0025 kWh/imp"
+      "1": "0.01 kWh/imp"
+      "2": "0.1 kWh/imp"
+      "3": "1 kWh/imp"
+      "4": "10 kWh/imp"
+      "5": "100 kWh/imp"
+
+  - key: password
+    name: "Password"
+    group: setup
+    table: holding
+    address: 24
+    type: float32
+    access: rw
+    description: "Write the password to unlock protected registers. Default 0000."
+
+  - key: network_baud_rate
+    name: "Network baud rate"
+    group: setup
+    table: holding
+    address: 28
+    type: float32
+    access: rw
+    values:
+      "0": "2400"
+      "1": "4800"
+      "2": "9600"
+      "3": "19200"
+      "4": "38400"
+    notes: "Default 2 (9600)."
+
+  - key: pulse1_energy_type
+    name: "Pulse 1 energy type"
+    group: setup
+    table: holding
+    address: 86
+    type: float32
+    access: rw
+    values:
+      "1": "Import active energy"
+      "2": "Total active energy"
+      "4": "Export active energy"
+      "5": "Import reactive energy"
+      "6": "Total reactive energy"
+      "8": "Export reactive energy"
+    notes: "Default 4."
+
+  - key: reset_max_demand
+    name: "Reset maximum demand"
+    group: setup
+    table: holding
+    address: 61456
+    type: uint16
+    access: w
+    values:
+      "0": "Reset the maximum demand values"
+
+  - key: serial_number
+    name: "Serial number"
+    group: setup
+    table: holding
+    address: 64512
+    type: uint32
+    access: r

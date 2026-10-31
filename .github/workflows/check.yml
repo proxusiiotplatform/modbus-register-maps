@@ -1,0 +1,29 @@
+name: check
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  maps:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pyyaml==6.0.2 jsonschema==4.23.0
+      - name: Validate maps
+        run: python3 tools/maps.py validate
+      - name: Catalog is current
+        run: python3 tools/maps.py catalog --check
+      - name: Build index
+        run: python3 tools/maps.py build dist
+      - uses: actions/upload-artifact@v4
+        with:
+          name: register-maps-json
+          path: dist/
