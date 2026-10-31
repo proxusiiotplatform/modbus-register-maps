@@ -31,6 +31,7 @@ two can never disagree.
 | Schneider Electric | [PM5100/PM5300](devices/schneider-electric/pm5100-pm5300.yaml) | power-analyzer | 877 | not yet |
 | Schneider Electric | [PM5500/PM5600/PM5700](devices/schneider-electric/pm5500-pm5600-pm5700.yaml) | power-analyzer | 3108 | not yet |
 | Siemens | [PAC3200](devices/siemens/pac3200.yaml) | power-analyzer | 151 | not yet |
+| Siemens | [PAC4200](devices/siemens/pac4200.yaml) | power-analyzer | 222 | not yet |
 <!-- catalog:end -->
 
 "Hardware-verified" means someone read the registers from a real device and recorded it under `verified`.

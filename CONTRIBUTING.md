@@ -10,8 +10,10 @@ Thanks for helping. Three kinds of contribution are especially welcome:
 
 1. Create `devices/<vendor>/<model>.yaml`, lower case and hyphenated, for example
    `devices/eastron/sdm630-modbus.yaml`. Copying an existing file is the quickest start.
-2. List at least one source under `sources`: the title, publisher, version and an `https://` link to the vendor's
-   register document. Maps without a public source can't be accepted.
+2. List at least one source under `sources`: the title, publisher, version, an `https://` link to the vendor's
+   register document and the date you accessed it (`accessed`). Add the document number (`document_id`) and the
+   file's SHA-256 (`sha256`) when you can, so readers can tell when the source changes. Maps without a public source
+   can't be accepted.
 3. Write `address` as the zero-based protocol address, the number sent on the wire:
 
    | The manual says | Write |
@@ -34,6 +36,12 @@ Thanks for helping. Three kinds of contribution are especially welcome:
    ```
 
    `catalog` adds your device to the table in README.md; commit that change too.
+
+## Importers
+
+`tools/importers/` converts machine-readable vendor files (Schneider PowerLogic and Altivar workbooks, Fronius SunSpec
+maps) into maps. When a vendor publishes a new revision, rerun the importer with the header in
+`tools/importers/headers/` instead of editing the generated file by hand.
 
 ## Verify a device
 

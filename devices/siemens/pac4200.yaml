@@ -1,0 +1,247 @@
+# Transcribed from Siemens' system manual; not yet checked against a device.
+schema_version: 1
+vendor: Siemens
+model: PAC4200
+aliases: [SENTRON PAC4200, 7KM4212-0BA00-3AA0, 7KM4211-1BA00-3AA0]
+category: power-analyzer
+summary: SENTRON PAC4200 power monitoring device; measurements are 32-bit floats, energy counters 64-bit floats.
+connection:
+  interfaces: [tcp, rtu]
+  default_byte_order: ABCD
+  notes:
+    - Addresses are the manual's offsets, sent unchanged (the convention mbmd's working PAC2200 driver uses).
+    - Function code 3 or 4 reads the same registers; reading from the middle of a multi-register value is refused.
+    - Modbus TCP is built in; Modbus RTU needs the PAC RS485 expansion module.
+    - Measured variables with a time stamp, minimum/maximum logs and the configuration settings are not in this map yet.
+sources:
+  - title: SENTRON PAC4200 Power Monitoring Device System Manual
+    publisher: Siemens
+    document_id: A5E02316180B-05
+    version: 05/2019
+    url: https://support.industry.siemens.com/cs/ww/en/view/34261595
+    accessed: 2026-10-31
+    sha256: fafd49af4745c2fc24d78b0a9a7d09a1a3746f7d9d7ade94baee1d5a9a247276
+    notes: Appendix A, tables A-1, A-2 (measured variables) and A-12 to A-16 (tariff-specific energy).
+registers:
+  - {key: voltage_l1_n, name: "Voltage L1-N", group: measurements, table: holding, address: 1, type: float32, unit: "V", access: r}
+  - {key: voltage_l2_n, name: "Voltage L2-N", group: measurements, table: holding, address: 3, type: float32, unit: "V", access: r}
+  - {key: voltage_l3_n, name: "Voltage L3-N", group: measurements, table: holding, address: 5, type: float32, unit: "V", access: r}
+  - {key: voltage_l1_l2, name: "Voltage L1-L2", group: measurements, table: holding, address: 7, type: float32, unit: "V", access: r}
+  - {key: voltage_l2_l3, name: "Voltage L2-L3", group: measurements, table: holding, address: 9, type: float32, unit: "V", access: r}
+  - {key: voltage_l3_l1, name: "Voltage L3-L1", group: measurements, table: holding, address: 11, type: float32, unit: "V", access: r}
+  - {key: current_l1, name: "Current L1", group: measurements, table: holding, address: 13, type: float32, unit: "A", access: r}
+  - {key: current_l2, name: "Current L2", group: measurements, table: holding, address: 15, type: float32, unit: "A", access: r}
+  - {key: current_l3, name: "Current L3", group: measurements, table: holding, address: 17, type: float32, unit: "A", access: r}
+  - {key: apparent_power_l1, name: "Apparent power L1", group: measurements, table: holding, address: 19, type: float32, unit: "VA", access: r}
+  - {key: apparent_power_l2, name: "Apparent power L2", group: measurements, table: holding, address: 21, type: float32, unit: "VA", access: r}
+  - {key: apparent_power_l3, name: "Apparent power L3", group: measurements, table: holding, address: 23, type: float32, unit: "VA", access: r}
+  - {key: active_power_l1, name: "Active power L1", group: measurements, table: holding, address: 25, type: float32, unit: "W", access: r}
+  - {key: active_power_l2, name: "Active power L2", group: measurements, table: holding, address: 27, type: float32, unit: "W", access: r}
+  - {key: active_power_l3, name: "Active power L3", group: measurements, table: holding, address: 29, type: float32, unit: "W", access: r}
+  - {key: reactive_power_l1_qn, name: "Reactive Power L1 (Qn)", group: measurements, table: holding, address: 31, type: float32, unit: "VAR", access: r}
+  - {key: reactive_power_l2_qn, name: "Reactive power L2 (Qn)", group: measurements, table: holding, address: 33, type: float32, unit: "VAR", access: r}
+  - {key: reactive_power_l3_qn, name: "Reactive power L3 (Qn)", group: measurements, table: holding, address: 35, type: float32, unit: "VAR", access: r}
+  - {key: power_factor_l1, name: "Power factor L1", group: measurements, table: holding, address: 37, type: float32, access: r}
+  - {key: power_factor_l2, name: "Power factor L2", group: measurements, table: holding, address: 39, type: float32, access: r}
+  - {key: power_factor_l3, name: "Power factor L3", group: measurements, table: holding, address: 41, type: float32, access: r}
+  - {key: thd_voltage_l1_l2, name: "THD voltage L1-L2", group: measurements, table: holding, address: 43, type: float32, unit: "%", access: r}
+  - {key: thd_voltage_l2_l3, name: "THD voltage L2-L3", group: measurements, table: holding, address: 45, type: float32, unit: "%", access: r}
+  - {key: thd_voltage_l3_l1, name: "THD voltage L3-L1", group: measurements, table: holding, address: 47, type: float32, unit: "%", access: r}
+  - {key: line_frequency, name: "Line Frequency", group: measurements, table: holding, address: 55, type: float32, unit: "Hz", access: r}
+  - {key: three_phase_average_voltage_l_n, name: "3-phase average voltage L-N", group: measurements, table: holding, address: 57, type: float32, unit: "V", access: r}
+  - {key: three_phase_average_voltage_l_l, name: "3-phase average voltage L-L", group: measurements, table: holding, address: 59, type: float32, unit: "V", access: r}
+  - {key: three_phase_average_current_l_l, name: "3-Phase Average Current L-L", group: measurements, table: holding, address: 61, type: float32, unit: "A", access: r}
+  - {key: total_apparent_power, name: "Total Apparent Power", group: measurements, table: holding, address: 63, type: float32, unit: "VA", access: r}
+  - {key: total_active_power, name: "Total Active Power", group: measurements, table: holding, address: 65, type: float32, unit: "W", access: r}
+  - {key: total_reactive_power_qn, name: "Total Reactive Power (Qn)", group: measurements, table: holding, address: 67, type: float32, unit: "VAR", access: r}
+  - {key: total_power_factor, name: "Total Power Factor", group: measurements, table: holding, address: 69, type: float32, access: r}
+  - {key: amplitude_unbalance_voltage, name: "Amplitude Unbalance Voltage", group: measurements, table: holding, address: 71, type: float32, unit: "%", access: r}
+  - {key: amplitude_unbalance_current, name: "Amplitude Unbalance Current", group: measurements, table: holding, address: 73, type: float32, unit: "%", access: r}
+  - {key: maximum_voltage_l1_n, name: "Maximum voltage L1-N", group: measurements, table: holding, address: 75, type: float32, unit: "V", access: r}
+  - {key: maximum_voltage_l2_n, name: "Maximum voltage L2-N", group: measurements, table: holding, address: 77, type: float32, unit: "V", access: r}
+  - {key: maximum_voltage_l3_n, name: "Maximum voltage L3-N", group: measurements, table: holding, address: 79, type: float32, unit: "V", access: r}
+  - {key: maximum_voltage_l1_l2, name: "Maximum voltage L1-L2", group: measurements, table: holding, address: 81, type: float32, unit: "V", access: r}
+  - {key: maximum_voltage_l2_l3, name: "Maximum voltage L2-L3", group: measurements, table: holding, address: 83, type: float32, unit: "V", access: r}
+  - {key: maximum_voltage_l3_l1, name: "Maximum voltage L3-L1", group: measurements, table: holding, address: 85, type: float32, unit: "V", access: r}
+  - {key: maximum_current_l1, name: "Maximum Current L1", group: measurements, table: holding, address: 87, type: float32, unit: "A", access: r}
+  - {key: maximum_current_l2, name: "Maximum Current L2", group: measurements, table: holding, address: 89, type: float32, unit: "A", access: r}
+  - {key: maximum_current_l3, name: "Maximum Current L3", group: measurements, table: holding, address: 91, type: float32, unit: "A", access: r}
+  - {key: maximum_apparent_power_l1, name: "Maximum Apparent Power L1", group: measurements, table: holding, address: 93, type: float32, unit: "VA", access: r}
+  - {key: maximum_apparent_power_l2, name: "Maximum Apparent Power L2", group: measurements, table: holding, address: 95, type: float32, unit: "VA", access: r}
+  - {key: maximum_apparent_power_l3, name: "Maximum Apparent Power L3", group: measurements, table: holding, address: 97, type: float32, unit: "VA", access: r}
+  - {key: maximum_active_power_l1, name: "Maximum Active Power L1", group: measurements, table: holding, address: 99, type: float32, unit: "W", access: r}
+  - {key: maximum_active_power_l2, name: "Maximum Active Power L2", group: measurements, table: holding, address: 101, type: float32, unit: "W", access: r}
+  - {key: maximum_active_power_l3, name: "Maximum Active Power L3", group: measurements, table: holding, address: 103, type: float32, unit: "W", access: r}
+  - {key: maximum_reactive_power_l1_qn, name: "Maximum Reactive Power L1 (Qn)", group: measurements, table: holding, address: 105, type: float32, unit: "VAR", access: r}
+  - {key: maximum_reactive_power_l2_qn, name: "Maximum Reactive Power L2 (Qn)", group: measurements, table: holding, address: 107, type: float32, unit: "VAR", access: r}
+  - {key: maximum_reactive_power_l3_qn, name: "Maximum Reactive Power L3 (Qn)", group: measurements, table: holding, address: 109, type: float32, unit: "VAR", access: r}
+  - {key: maximum_power_factor_l1, name: "Maximum Power Factor L1", group: measurements, table: holding, address: 111, type: float32, access: r}
+  - {key: maximum_power_factor_l2, name: "Maximum Power Factor L2", group: measurements, table: holding, address: 113, type: float32, access: r}
+  - {key: maximum_power_factor_l3, name: "Maximum Power Factor L3", group: measurements, table: holding, address: 115, type: float32, access: r}
+  - {key: maximum_thd_voltage_l1_l2, name: "Maximum THD Voltage L1-L2", group: measurements, table: holding, address: 117, type: float32, unit: "%", access: r}
+  - {key: maximum_thd_voltage_l2_l3, name: "Maximum THD Voltage L2-L3", group: measurements, table: holding, address: 119, type: float32, unit: "%", access: r}
+  - {key: maximum_thd_voltage_l3_l1, name: "Maximum THD Voltage L3-L1", group: measurements, table: holding, address: 121, type: float32, unit: "%", access: r}
+  - {key: maximum_line_frequency, name: "Maximum Line Frequency", group: measurements, table: holding, address: 129, type: float32, unit: "Hz", access: r}
+  - {key: maximum_three_phase_average_voltage_l_n, name: "Maximum 3-Phase Average Voltage L-N", group: measurements, table: holding, address: 131, type: float32, unit: "V", access: r}
+  - {key: maximum_three_phase_average_voltage_l_l, name: "Maximum 3-Phase Average Voltage L-L", group: measurements, table: holding, address: 133, type: float32, unit: "V", access: r}
+  - {key: maximum_three_phase_average_voltage_l_l_135, name: "Maximum 3-Phase Average Voltage L-L", group: measurements, table: holding, address: 135, type: float32, unit: "A", access: r, notes: "The manual names this a voltage but gives the unit A; it is most likely the 3-phase average current."}
+  - {key: maximum_total_apparent_power, name: "Maximum Total Apparent Power", group: measurements, table: holding, address: 137, type: float32, unit: "VA", access: r}
+  - {key: maximum_total_active_power, name: "Maximum Total Active Power", group: measurements, table: holding, address: 139, type: float32, unit: "W", access: r}
+  - {key: maximum_total_reactive_power_qn, name: "Maximum Total Reactive Power (Qn)", group: measurements, table: holding, address: 141, type: float32, unit: "VAR", access: r}
+  - {key: maximum_total_power_factor, name: "Maximum Total Power Factor", group: measurements, table: holding, address: 143, type: float32, access: r}
+  - {key: minimum_voltage_l1_n, name: "Minimum voltage L1-N", group: measurements, table: holding, address: 145, type: float32, unit: "V", access: r}
+  - {key: minimum_voltage_l2_n, name: "Minimum voltage L2 -N", group: measurements, table: holding, address: 147, type: float32, unit: "V", access: r}
+  - {key: minimum_voltage_l3_n, name: "Minimum Voltage L3-N", group: measurements, table: holding, address: 149, type: float32, unit: "V", access: r}
+  - {key: minimum_voltage_l1_l2, name: "Minimum voltage L1-L2", group: measurements, table: holding, address: 151, type: float32, unit: "V", access: r}
+  - {key: minimum_voltage_l2_l3, name: "Minimum Voltage L2-L3", group: measurements, table: holding, address: 153, type: float32, unit: "V", access: r}
+  - {key: minimum_voltage_l3_l1, name: "Minimum Voltage L3-L1", group: measurements, table: holding, address: 155, type: float32, unit: "V", access: r}
+  - {key: minimum_current_l1, name: "Minimum Current L1", group: measurements, table: holding, address: 157, type: float32, unit: "A", access: r}
+  - {key: minimum_current_l2, name: "Minimum Current L2", group: measurements, table: holding, address: 159, type: float32, unit: "A", access: r}
+  - {key: minimum_current_l3, name: "Minimum Current L3", group: measurements, table: holding, address: 161, type: float32, unit: "A", access: r}
+  - {key: minimum_apparent_power_l1, name: "Minimum Apparent Power L1", group: measurements, table: holding, address: 163, type: float32, unit: "VA", access: r}
+  - {key: minimum_apparent_power_l2, name: "Minimum Apparent Power L2", group: measurements, table: holding, address: 165, type: float32, unit: "VA", access: r}
+  - {key: minimum_apparent_power_l3, name: "Minimum Apparent Power L3", group: measurements, table: holding, address: 167, type: float32, unit: "VA", access: r}
+  - {key: minimum_active_power_l1, name: "Minimum Active Power L1", group: measurements, table: holding, address: 169, type: float32, unit: "W", access: r}
+  - {key: minimum_active_power_l2, name: "Minimum Active Power L2", group: measurements, table: holding, address: 171, type: float32, unit: "W", access: r}
+  - {key: minimum_active_power_l3, name: "Minimum Active Power L3", group: measurements, table: holding, address: 173, type: float32, unit: "W", access: r}
+  - {key: minimum_reactive_power_l1_qn, name: "Minimum Reactive Power L1 (Qn)", group: measurements, table: holding, address: 175, type: float32, unit: "VAR", access: r}
+  - {key: minimum_reactive_power_l2_qn, name: "Minimum Reactive Power L2 (Qn)", group: measurements, table: holding, address: 177, type: float32, unit: "VAR", access: r}
+  - {key: minimum_reactive_power_l3_qn, name: "Minimum Reactive Power L3 (Qn)", group: measurements, table: holding, address: 179, type: float32, unit: "VAR", access: r}
+  - {key: minimum_power_factor_l1, name: "Minimum Power Factor L1", group: measurements, table: holding, address: 181, type: float32, access: r}
+  - {key: minimum_power_factor_l2, name: "Minimum Power Factor L2", group: measurements, table: holding, address: 183, type: float32, access: r}
+  - {key: minimum_power_factor_l3, name: "Minimum Power Factor L3", group: measurements, table: holding, address: 185, type: float32, access: r}
+  - {key: minimum_line_frequency, name: "Minimum Line Frequency", group: measurements, table: holding, address: 187, type: float32, unit: "Hz", access: r}
+  - {key: minimum_three_phase_average_voltage_l_n, name: "Minimum 3-Phase Average Voltage L-N", group: measurements, table: holding, address: 189, type: float32, unit: "V", access: r}
+  - {key: minimum_three_phase_average_voltage_l_l, name: "Minimum 3-Phase Average Voltage L-L", group: measurements, table: holding, address: 191, type: float32, unit: "V", access: r}
+  - {key: minimum_three_phase_average_current_l_l, name: "Minimum 3-Phase Average Current L-L", group: measurements, table: holding, address: 193, type: float32, unit: "A", access: r}
+  - {key: minimum_total_apparent_power, name: "Minimum Total Apparent Power", group: measurements, table: holding, address: 195, type: float32, unit: "VA", access: r}
+  - {key: minimum_total_active_power, name: "Minimum Total Active Power", group: measurements, table: holding, address: 197, type: float32, unit: "W", access: r}
+  - {key: minimum_total_reactive_power_varn, name: "Minimum Total Reactive Power (VARn)", group: measurements, table: holding, address: 199, type: float32, unit: "var", access: r}
+  - {key: minimum_total_power_factor, name: "Minimum Total Power Factor", group: measurements, table: holding, address: 201, type: float32, unit: "VAR", access: r}
+  - {key: limit_violations, name: "Limit Violations*", group: measurements, table: holding, address: 203, type: uint32, access: r}
+  - {key: pmd_diagnostics_and_status, name: "PMD Diagnostics and Status*", group: measurements, table: holding, address: 205, type: uint32, access: r}
+  - {key: digital_outputs_status, name: "Digital Outputs* Status", group: measurements, table: holding, address: 207, type: uint32, access: r}
+  - {key: digital_inputs_status, name: "Digital Inputs* Status", group: measurements, table: holding, address: 209, type: uint32, access: r}
+  - {key: active_tariff, name: "Active Tariff", group: measurements, table: holding, address: 211, type: uint32, access: r}
+  - {key: operating_hours_counter2, name: "Operating hours counter2", group: measurements, table: holding, address: 213, type: uint32, unit: "s", access: rw}
+  - {key: universal_counter2, name: "Universal counter2", group: measurements, table: holding, address: 215, type: uint32, access: rw}
+  - {key: relevant_parameter_changes_counter, name: "Relevant Parameter Changes Counter", group: measurements, table: holding, address: 217, type: uint32, access: r}
+  - {key: counter_all_parameter_changes, name: "Counter All Parameter Changes", group: measurements, table: holding, address: 219, type: uint32, access: r}
+  - {key: counter_limit_violations, name: "Counter Limit Violations", group: measurements, table: holding, address: 221, type: uint32, access: r}
+  - {key: event_counter, name: "Event Counter", group: measurements, table: holding, address: 223, type: uint32, access: r}
+  - {key: alarm_counter, name: "Alarm Counter", group: measurements, table: holding, address: 225, type: uint32, access: r}
+  - {key: load_profile_counter, name: "Load Profile Counter", group: measurements, table: holding, address: 227, type: uint32, access: r}
+  - {key: misc_counter, name: "Misc. Counter", group: measurements, table: holding, address: 229, type: uint32, access: r}
+  - {key: status_digital_outputs_module_11, name: "Status Digital Outputs Module 11)", group: measurements, table: holding, address: 231, type: uint32, access: r}
+  - {key: status_digital_inputs_module_11, name: "Status Digital Inputs Module 11)", group: measurements, table: holding, address: 233, type: uint32, access: r}
+  - {key: status_digital_outputs_module_21, name: "Status Digital Outputs Module 21)", group: measurements, table: holding, address: 235, type: uint32, access: r}
+  - {key: status_digital_inputs_module_21, name: "Status Digital Inputs Module 21)", group: measurements, table: holding, address: 237, type: uint32, access: r}
+  - {key: cos_l1, name: "Cos φ L1", group: measurements, table: holding, address: 243, type: float32, access: r}
+  - {key: cos_l2, name: "Cos φ L2", group: measurements, table: holding, address: 245, type: float32, access: r}
+  - {key: cos_l3, name: "Cos φ L3", group: measurements, table: holding, address: 247, type: float32, access: r}
+  - {key: displacement_angle_l1, name: "Displacement Angle L1", group: measurements, table: holding, address: 249, type: float32, unit: "°", access: r}
+  - {key: displacement_angle_l2, name: "Displacement Angle L2", group: measurements, table: holding, address: 251, type: float32, unit: "°", access: r}
+  - {key: displacement_angle_l3, name: "Displacement Angle L3", group: measurements, table: holding, address: 253, type: float32, unit: "°", access: r}
+  - {key: phase_angle_l1_l1, name: "Phase Angle L1-L1", group: measurements, table: holding, address: 255, type: float32, unit: "°", access: r}
+  - {key: phase_angle_l1_l2, name: "Phase Angle L1-L2", group: measurements, table: holding, address: 257, type: float32, unit: "°", access: r}
+  - {key: phase_angle_l1_l3, name: "Phase Angle L1-L3", group: measurements, table: holding, address: 259, type: float32, unit: "°", access: r}
+  - {key: thd_voltage_l1, name: "THD voltage L1", group: measurements, table: holding, address: 261, type: float32, unit: "%", access: r}
+  - {key: thd_voltage_l2, name: "THD voltage L2", group: measurements, table: holding, address: 263, type: float32, unit: "%", access: r}
+  - {key: thd_voltage_l3, name: "THD voltage L3", group: measurements, table: holding, address: 265, type: float32, unit: "%", access: r}
+  - {key: thd_current_l1, name: "THD current L1", group: measurements, table: holding, address: 267, type: float32, unit: "%", access: r}
+  - {key: thd_current_l2, name: "THD current L2", group: measurements, table: holding, address: 269, type: float32, unit: "%", access: r}
+  - {key: thd_current_l3, name: "THD current L3", group: measurements, table: holding, address: 271, type: float32, unit: "%", access: r}
+  - {key: distortion_current_l1, name: "Distortion current L1", group: measurements, table: holding, address: 273, type: float32, unit: "A", access: r}
+  - {key: distortion_current_l2, name: "Distortion current L2", group: measurements, table: holding, address: 275, type: float32, unit: "A", access: r}
+  - {key: distortion_current_l3, name: "Distortion current L3", group: measurements, table: holding, address: 277, type: float32, unit: "A", access: r}
+  - {key: total_reactive_power_l1_qtot, name: "Total Reactive Power L1 (Qtot)", group: measurements, table: holding, address: 279, type: float32, unit: "VAR", access: r}
+  - {key: total_reactive_power_l2_qtot, name: "Total Reactive Power L2 (Qtot)", group: measurements, table: holding, address: 281, type: float32, unit: "VAR", access: r}
+  - {key: total_reactive_power_l3_qtot, name: "Total Reactive Power L3 (Qtot)", group: measurements, table: holding, address: 283, type: float32, unit: "VAR", access: r}
+  - {key: reactive_power_l1_q1, name: "Reactive power L1 (Q1)", group: measurements, table: holding, address: 285, type: float32, unit: "VAR", access: r}
+  - {key: reactive_power_l1_q1_287, name: "Reactive power L1 (Q1)", group: measurements, table: holding, address: 287, type: float32, unit: "VAR", access: r}
+  - {key: reactive_power_l1_q1_289, name: "Reactive power L1 (Q1)", group: measurements, table: holding, address: 289, type: float32, unit: "VAR", access: r}
+  - {key: unbalance_voltage, name: "Unbalance Voltage", group: measurements, table: holding, address: 291, type: float32, unit: "%", access: r}
+  - {key: unbalance_current, name: "Unbalance Current", group: measurements, table: holding, address: 293, type: float32, unit: "%", access: r}
+  - {key: neutral_current, name: "Neutral Current", group: measurements, table: holding, address: 295, type: float32, unit: "A", access: r}
+  - {key: total_reactive_power_qtot, name: "Total Reactive Power (Qtot)", group: measurements, table: holding, address: 297, type: float32, unit: "VAR", access: r}
+  - {key: total_reactive_power_var1, name: "Total Reactive Power (VAR1)", group: measurements, table: holding, address: 299, type: float32, unit: "VAR", access: r}
+  - {key: sliding_window_demand_voltage_l1_n, name: "Sliding Window Demand Voltage L1-N", group: measurements, table: holding, address: 301, type: float32, unit: "V", access: r}
+  - {key: sliding_window_demand_voltage_l2_n, name: "Sliding Window Demand Voltage L2-N", group: measurements, table: holding, address: 303, type: float32, unit: "V", access: r}
+  - {key: sliding_window_demand_voltage_l3_n, name: "Sliding Window Demand Voltage L3-N", group: measurements, table: holding, address: 305, type: float32, unit: "V", access: r}
+  - {key: sliding_window_demand_voltage_l1_l2, name: "Sliding Window Demand Voltage L1-L2", group: measurements, table: holding, address: 307, type: float32, unit: "V", access: r}
+  - {key: sliding_window_demand_voltage_l2_l3, name: "Sliding Window Demand Voltage L2-L3", group: measurements, table: holding, address: 309, type: float32, unit: "V", access: r}
+  - {key: sliding_window_demand_voltage_l3_l1, name: "Sliding Window Demand Voltage L3-L1", group: measurements, table: holding, address: 311, type: float32, unit: "V", access: r}
+  - {key: sliding_window_demand_current_l1, name: "Sliding Window Demand Current L1", group: measurements, table: holding, address: 313, type: float32, unit: "A", access: r}
+  - {key: sliding_window_demand_current_l2, name: "Sliding Window Demand Current L2", group: measurements, table: holding, address: 315, type: float32, unit: "A", access: r}
+  - {key: sliding_window_demand_current_l3, name: "Sliding Window Demand Current L3", group: measurements, table: holding, address: 317, type: float32, unit: "A", access: r}
+  - {key: sliding_window_demand_apparent_power_l1, name: "Sliding Window Demand Apparent Power L1", group: measurements, table: holding, address: 319, type: float32, unit: "VA", access: r}
+  - {key: sliding_window_demand_apparent_power_l2, name: "Sliding Window Demand Apparent Power L2", group: measurements, table: holding, address: 321, type: float32, unit: "VA", access: r}
+  - {key: sliding_window_demand_apparent_power_l3, name: "Sliding Window Demand Apparent Power L3", group: measurements, table: holding, address: 323, type: float32, unit: "VA", access: r}
+  - {key: sliding_window_demand_active_power_l1, name: "Sliding Window Demand Active Power L1", group: measurements, table: holding, address: 325, type: float32, unit: "W", access: r}
+  - {key: sliding_window_demand_active_power_l2, name: "Sliding Window Demand Active Power L2", group: measurements, table: holding, address: 327, type: float32, unit: "W", access: r}
+  - {key: sliding_window_demand_active_power_l3, name: "Sliding Window Demand Active Power L3", group: measurements, table: holding, address: 329, type: float32, unit: "W", access: r}
+  - {key: sliding_window_demand_reactive_power_l1_qn, name: "Sliding Window Demand Reactive Power L1 (Qn)", group: measurements, table: holding, address: 331, type: float32, unit: "VAR", access: r}
+  - {key: sliding_window_demand_reactive_power_l2_qn, name: "Sliding Window Demand Reactive Power L2 (Qn)", group: measurements, table: holding, address: 333, type: float32, unit: "VAR", access: r}
+  - {key: sliding_window_demand_reactive_power_l3_qn, name: "Sliding Window Demand Reactive Power L3 (Qn)", group: measurements, table: holding, address: 335, type: float32, unit: "VAR", access: r}
+  - {key: sliding_window_demand_total_reactive_power_l1_qtot, name: "Sliding Window Demand Total Reactive Power L1 (Qtot)", group: measurements, table: holding, address: 337, type: float32, unit: "VAR", access: r}
+  - {key: sliding_window_demand_total_reactive_power_l2_qtot, name: "Sliding Window Demand Total Reactive Power L2 (Qtot)", group: measurements, table: holding, address: 339, type: float32, unit: "VAR", access: r}
+  - {key: sliding_window_demand_total_reactive_power_l3_qtot, name: "Sliding Window Demand Total Reactive Power L3 (Qtot)", group: measurements, table: holding, address: 341, type: float32, unit: "VAR", access: r}
+  - {key: sliding_window_demand_reactive_power_l1_q1, name: "Sliding Window Demand Reactive Power L1 (Q1)", group: measurements, table: holding, address: 343, type: float32, unit: "VAR", access: r}
+  - {key: sliding_window_demand_reactive_power_l2_q1, name: "Sliding Window Demand Reactive Power L2 (Q1)", group: measurements, table: holding, address: 345, type: float32, unit: "VAR", access: r}
+  - {key: sliding_window_demand_reactive_power_l3_q1, name: "Sliding Window Demand Reactive Power L3 (Q1)", group: measurements, table: holding, address: 347, type: float32, unit: "VAR", access: r}
+  - {key: sliding_window_demand_power_factor_l1, name: "Sliding Window Demand Power Factor L1", group: measurements, table: holding, address: 349, type: float32, access: r}
+  - {key: sliding_window_demand_power_factor_l2, name: "Sliding Window Demand Power Factor L2", group: measurements, table: holding, address: 351, type: float32, access: r}
+  - {key: sliding_window_demand_power_factor_l3, name: "Sliding Window Demand Power Factor L3", group: measurements, table: holding, address: 353, type: float32, access: r}
+  - {key: sliding_window_demand_total_apparent_power, name: "Sliding Window Demand Total Apparent Power", group: measurements, table: holding, address: 355, type: float32, unit: "VA", access: r}
+  - {key: sliding_window_demand_total_active_power, name: "Sliding Window Demand Total Active Power", group: measurements, table: holding, address: 357, type: float32, unit: "W", access: r}
+  - {key: sliding_window_demand_total_reactive_power_qn, name: "Sliding Window Demand Total Reactive Power (Qn)", group: measurements, table: holding, address: 359, type: float32, unit: "VAR", access: r}
+  - {key: sliding_window_demand_total_reactive_power_qtot, name: "Sliding Window Demand Total Reactive Power (Qtot)", group: measurements, table: holding, address: 361, type: float32, unit: "VAR", access: r}
+  - {key: sliding_window_demand_total_reactive_power_q1, name: "Sliding Window Demand Total Reactive Power (Q1)", group: measurements, table: holding, address: 363, type: float32, unit: "VAR", access: r}
+  - {key: sliding_window_demand_total_power_factor, name: "Sliding Window Demand Total Power Factor", group: measurements, table: holding, address: 365, type: float32, access: r}
+  - {key: sliding_window_demand_neutral_current, name: "Sliding Window Demand Neutral Current", group: measurements, table: holding, address: 367, type: float32, unit: "A", access: r}
+  - {key: process_operating_hours_counter2, name: "Process operating hours counter2)", group: measurements, table: holding, address: 369, type: uint32, unit: "s", access: rw}
+  - {key: universal_counter_22, name: "Universal counter 22)", group: measurements, table: holding, address: 371, type: uint32, access: rw}
+  - {key: pulse_counter_02, name: "Pulse counter 02)", group: measurements, table: holding, address: 373, type: uint32, access: rw}
+  - {key: pulse_counter_022, name: "Pulse counter 022)", group: measurements, table: holding, address: 375, type: uint32, access: rw}
+  - {key: pulse_counter_032, name: "Pulse counter 032)", group: measurements, table: holding, address: 377, type: uint32, access: rw}
+  - {key: pulse_counter_042, name: "Pulse counter 042)", group: measurements, table: holding, address: 379, type: uint32, access: rw}
+  - {key: pulse_counter_052, name: "Pulse counter 052)", group: measurements, table: holding, address: 381, type: uint32, access: rw}
+  - {key: pulse_counter_062, name: "Pulse counter 062)", group: measurements, table: holding, address: 383, type: uint32, access: rw}
+  - {key: pulse_counter_072, name: "Pulse counter 072)", group: measurements, table: holding, address: 385, type: uint32, access: rw}
+  - {key: pulse_counter_082, name: "Pulse counter 082)", group: measurements, table: holding, address: 387, type: uint32, access: rw}
+  - {key: pulse_counter_092, name: "Pulse counter 092)", group: measurements, table: holding, address: 389, type: uint32, access: rw}
+  - {key: pulse_counter_102, name: "Pulse counter 102)", group: measurements, table: holding, address: 391, type: uint32, access: rw}
+  - {key: date_time_797, name: "Date/time", group: energy, table: holding, address: 797, type: raw, length: 4, access: rw, notes: "Siemens time stamp format; see the system manual."}
+  - {key: active_energy_import_tariff_1, name: "Active Energy Import Tariff 1", group: energy, table: holding, address: 801, type: float64, unit: "Wh", access: rw}
+  - {key: active_energy_import_tariff_2, name: "Active Energy Import Tariff 2", group: energy, table: holding, address: 805, type: float64, unit: "Wh", access: rw}
+  - {key: active_energy_export_tariff_1, name: "Active Energy Export Tariff 1", group: energy, table: holding, address: 809, type: float64, unit: "Wh", access: rw}
+  - {key: active_energy_export_tariff_2, name: "Active Energy Export Tariff 2", group: energy, table: holding, address: 813, type: float64, unit: "Wh", access: rw}
+  - {key: reactive_energy_import_tariff_1, name: "Reactive Energy Import Tariff 1", group: energy, table: holding, address: 817, type: float64, unit: "VARh", access: rw}
+  - {key: reactive_energy_import_tariff_2, name: "Reactive Energy Import Tariff 2", group: energy, table: holding, address: 821, type: float64, unit: "VARh", access: rw}
+  - {key: reactive_energy_export_tariff_1, name: "Reactive Energy Export Tariff 1", group: energy, table: holding, address: 825, type: float64, unit: "VARh", access: rw}
+  - {key: reactive_energy_export_tariff_2, name: "Reactive Energy Export Tariff 2", group: energy, table: holding, address: 829, type: float64, unit: "VARh", access: rw}
+  - {key: apparent_energy_tariff_1, name: "Apparent Energy Tariff 1", group: energy, table: holding, address: 833, type: float64, unit: "VAh", access: rw}
+  - {key: apparent_energy_tariff_2, name: "Apparent Energy Tariff 2", group: energy, table: holding, address: 837, type: float64, unit: "VAh", access: rw}
+  - {key: process_active_energy, name: "Process active energy", group: energy, table: holding, address: 841, type: float64, unit: "Wh", access: rw}
+  - {key: process_reactive_energy, name: "Process reactive energy", group: energy, table: holding, address: 845, type: float64, unit: "VARh", access: rw}
+  - {key: process_apparent_energy, name: "Process apparent energy", group: energy, table: holding, address: 849, type: float64, unit: "VAh", access: rw}
+  - {key: process_active_energy_previous_measurement, name: "Process active energy – previous measurement", group: energy, table: holding, address: 853, type: float64, unit: "Wh", access: r}
+  - {key: process_reactive_energy_previous_measurement, name: "Process reactive energy – previous measurement", group: energy, table: holding, address: 857, type: float64, unit: "VARh", access: r}
+  - {key: process_apparent_energy_previous_measurement, name: "Process apparent energy – previous measurement", group: energy, table: holding, address: 861, type: float64, unit: "VAh", access: r}
+  - {key: date_time, name: "Date/time", group: energy, table: holding, address: 2799, type: uint32, access: r}
+  - {key: active_energy_import_tariff_1_2801, name: "Active Energy Import Tariff 1", group: energy, table: holding, address: 2801, type: float32, unit: "Wh", access: r}
+  - {key: active_energy_import_tariff_2_2803, name: "Active Energy Import Tariff 2", group: energy, table: holding, address: 2803, type: float32, unit: "Wh", access: r}
+  - {key: active_energy_export_tariff_1_2805, name: "Active Energy Export Tariff 1", group: energy, table: holding, address: 2805, type: float32, unit: "Wh", access: r}
+  - {key: active_energy_export_tariff_2_2807, name: "Active Energy Export Tariff 2", group: energy, table: holding, address: 2807, type: float32, unit: "Wh", access: r}
+  - {key: reactive_energy_import_tariff_1_2809, name: "Reactive Energy Import Tariff 1", group: energy, table: holding, address: 2809, type: float32, unit: "VARh", access: r}
+  - {key: reactive_energy_import_tariff_2_2811, name: "Reactive Energy Import Tariff 2", group: energy, table: holding, address: 2811, type: float32, unit: "VARh", access: r}
+  - {key: reactive_energy_export_tariff_1_2813, name: "Reactive Energy Export Tariff 1", group: energy, table: holding, address: 2813, type: float32, unit: "VARh", access: r}
+  - {key: reactive_energy_export_tariff_2_2815, name: "Reactive Energy Export Tariff 2", group: energy, table: holding, address: 2815, type: float32, unit: "VARh", access: r}
+  - {key: apparent_energy_tariff_1_2817, name: "Apparent Energy Tariff 1", group: energy, table: holding, address: 2817, type: float32, unit: "VAh", access: r}
+  - {key: apparent_energy_tariff_2_2819, name: "Apparent Energy Tariff 2", group: energy, table: holding, address: 2819, type: float32, unit: "VAh", access: r}
+  - {key: process_active_energy_2821, name: "Process active energy", group: energy, table: holding, address: 2821, type: float32, unit: "Wh", access: r}
+  - {key: process_reactive_energy_2823, name: "Process reactive energy", group: energy, table: holding, address: 2823, type: float32, unit: "VARh", access: r}
+  - {key: process_apparent_energy_2825, name: "Process apparent energy", group: energy, table: holding, address: 2825, type: float32, unit: "VAh", access: r}
+  - {key: process_active_energy_previous_measurement_2827, name: "Process active energy – previous measurement", group: energy, table: holding, address: 2827, type: float32, unit: "Wh", access: r}
+  - {key: process_reactive_energy_previous_measurement_2829, name: "Process reactive energy – previous measurement", group: energy, table: holding, address: 2829, type: float32, unit: "VARh", access: r}
+  - {key: process_apparent_energy_previous_measurement_2831, name: "Process apparent energy – previous measurement", group: energy, table: holding, address: 2831, type: float32, unit: "VAh", access: r}
