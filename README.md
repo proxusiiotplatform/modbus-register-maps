@@ -15,6 +15,14 @@ two can never disagree.
 |---|---|---|---|---|
 | Eastron | [SDM120-Modbus](devices/eastron/sdm120-modbus.yaml) | energy-meter | 32 | not yet |
 | Eastron | [SDM630-Modbus](devices/eastron/sdm630-modbus.yaml) | energy-meter | 97 | not yet |
+| Fronius | [Primo GEN24 Plus/Symo GEN24 Plus](devices/fronius/primo-gen24-plus-symo-gen24-plus.yaml) | inverter | 224 | not yet |
+| Fronius | [Primo GEN24/Symo GEN24](devices/fronius/primo-gen24-symo-gen24.yaml) | inverter | 178 | not yet |
+| Fronius | [Smart Meter](devices/fronius/smart-meter.yaml) | energy-meter | 73 | not yet |
+| Fronius | [Tauro ECO](devices/fronius/tauro-eco.yaml) | inverter | 168 | not yet |
+| Fronius | [Tauro](devices/fronius/tauro.yaml) | inverter | 188 | not yet |
+| Fronius | [Verto 3 MPPT](devices/fronius/verto-3-mppt.yaml) | inverter | 188 | not yet |
+| Fronius | [Verto 4 MPPT](devices/fronius/verto-4-mppt.yaml) | inverter | 198 | not yet |
+| Fronius | [Verto Plus](devices/fronius/verto-plus.yaml) | inverter | 234 | not yet |
 | Schneider Electric | [ATV320](devices/schneider-electric/atv320.yaml) | vfd | 1071 | not yet |
 | Schneider Electric | [ATV340](devices/schneider-electric/atv340.yaml) | vfd | 1741 | not yet |
 | Schneider Electric | [ATV600](devices/schneider-electric/atv600.yaml) | vfd | 1879 | not yet |
@@ -55,6 +63,8 @@ registers:
 ```
 
 Optional per register: `byte_order` (ABCD, CDAB, BADC, DCBA), `scale` (engineering value = raw × scale),
+`scale_factor` (key of a register holding a power-of-ten exponent, as SunSpec devices use), `length` (for `string`,
+`bitfield` and `raw`),
 `values` (meaning of enumerated values), `applies_to` (wiring modes), `group`, `description` and `notes`.
 The full contract is [schema/device.schema.json](schema/device.schema.json).
 

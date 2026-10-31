@@ -298,6 +298,11 @@
           "type": "number",
           "exclusiveMinimum": 0
         },
+        "scale_factor": {
+          "description": "Key of an int16 register holding a power-of-ten exponent (SunSpec sunssf): engineering value = raw value * 10^exponent.",
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]*$"
+        },
         "unit": {
           "type": "string",
           "minLength": 1,

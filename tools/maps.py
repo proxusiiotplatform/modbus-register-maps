@@ -118,6 +118,14 @@ def check_device(path: Path, doc: dict, validator: jsonschema.Draft202012Validat
             if start_b < end_a:
                 errors.append(f"{rel}: {table} registers {key_a} ({start_a}) and {key_b} ({start_b}) overlap")
 
+    by_key = {reg["key"]: reg for reg in doc["registers"]}
+    for reg in doc["registers"]:
+        ref = reg.get("scale_factor")
+        if ref and (ref not in by_key or by_key[ref]["type"] != "int16"):
+            errors.append(f"{rel}: {reg['key']}: scale_factor {ref!r} must name an int16 register in this map")
+        if ref and "scale" in reg:
+            errors.append(f"{rel}: {reg['key']}: use scale or scale_factor, not both")
+
     for entry in doc.get("verified", []):
         missing = [k for k in entry["registers"] if k != "all" and k not in keys]
         if missing:
