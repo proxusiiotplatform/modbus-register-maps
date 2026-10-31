@@ -5,7 +5,8 @@ name: verification
 # against a strict schema; nothing from it is interpolated into a shell command.
 on:
   issues:
-    types: [opened, edited, labeled]
+    # Not "labeled": the issue form adds the label as it opens the issue, which would run this twice.
+    types: [opened, edited]
 
 permissions:
   contents: write

@@ -169,7 +169,8 @@ def main() -> int:
 
     lines = [f"**Outcome: {outcome}**", ""]
     if entry:
-        lines += [f"- Level: {entry['level']}", f"- Model / firmware: {entry.get('model', '?')} / {entry.get('firmware', '?')}"]
+        lines.append(f"- Level: {entry['level']}")
+        lines += [f"- {field.capitalize()}: {entry[field]}" for field in ("model", "firmware") if entry.get(field)]
     lines += [f"- {n}" for n in notes]
     summary = "\n".join(lines) + "\n"
     print(summary)
