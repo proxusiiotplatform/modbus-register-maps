@@ -7,6 +7,7 @@
 """
 from __future__ import annotations
 
+import hashlib
 import json
 import os
 import re
@@ -127,7 +128,7 @@ def check_device(path: Path, doc: dict, validator: jsonschema.Draft202012Validat
             errors.append(f"{rel}: {reg['key']}: use scale or scale_factor, not both")
 
     for entry in doc.get("verified", []):
-        missing = [k for k in entry["registers"] if k != "all" and k not in keys]
+        missing = [k for k in entry.get("registers", []) + entry.get("unreadable", []) if k != "all" and k not in keys]
         if missing:
             errors.append(f"{rel}: verified by {entry['by']} names unknown registers {missing}")
     return errors
@@ -185,6 +186,22 @@ def write_summary(docs: list[tuple[Path, dict]], errors: list[str]) -> None:
         f.write("\n".join(lines) + "\n")
 
 
+def content_sha256(doc: dict) -> str:
+    """Identifies the register content a verification report was made against. Only what decoding depends on
+    counts, so adding a verification or a note does not make earlier reports look stale."""
+    content = {"default_byte_order": doc["connection"].get("default_byte_order", "ABCD"), "registers": doc["registers"]}
+    return hashlib.sha256(json.dumps(content, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode()).hexdigest()
+
+
+def verification_summary(doc: dict) -> str:
+    entries = doc.get("verified", [])
+    if not entries:
+        return "not yet"
+    best = max(e["level"] for e in entries)
+    people = len({e["by"].lstrip("@").lower() for e in entries})
+    return f"{best}, {people} {'person' if people == 1 else 'people'}"
+
+
 def enrich(doc: dict) -> dict:
     default_order = doc["connection"].get("default_byte_order", "ABCD")
     registers = []
@@ -210,7 +227,9 @@ def build(out_dir: Path) -> int:
         return 1
     index = []
     for path in device_files():
-        device = enrich(load(path))
+        doc = load(path)
+        device = enrich(doc)
+        device["content_sha256"] = content_sha256(doc)
         target = out_dir / "devices" / f"{device['id']}.json"
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_text(json.dumps(device, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
@@ -223,6 +242,8 @@ def build(out_dir: Path) -> int:
             "summary": device["summary"],
             "registers": len(device["registers"]),
             "hardware_verified": bool(device.get("verified")),
+            "verification": verification_summary(device),
+            "content_sha256": device["content_sha256"],
             "path": f"devices/{device['id']}.json",
         })
     (out_dir / "index.json").write_text(
@@ -237,7 +258,7 @@ def catalog_table() -> str:
         d = load(path)
         rel = path.relative_to(ROOT).as_posix()
         rows.append(f"| {d['vendor']} | [{d['model']}]({rel}) | {d['category']} | {len(d['registers'])} | "
-                    f"{'yes' if d.get('verified') else 'not yet'} |")
+                    f"{verification_summary(d)} |")
     return "\n".join(rows)
 
 

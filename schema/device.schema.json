@@ -162,7 +162,7 @@
       }
     },
     "verified": {
-      "description": "Reads against real hardware. Maps without entries are transcribed from the sources only.",
+      "description": "Reads against real hardware. Maps without entries are transcribed from the sources only. L1: the registers answer; L2: the values pass automatic plausibility checks; L3: a person matched values with the device's display.",
       "type": "array",
       "items": {
         "type": "object",
@@ -170,7 +170,7 @@
         "required": [
           "by",
           "date",
-          "registers"
+          "level"
         ],
         "properties": {
           "by": {
@@ -182,13 +182,37 @@
             "format": "date",
             "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
           },
+          "level": {
+            "enum": [
+              "L1",
+              "L2",
+              "L3"
+            ]
+          },
+          "model": {
+            "type": "string"
+          },
           "firmware": {
             "type": "string"
           },
+          "tool": {
+            "type": "string"
+          },
+          "report": {
+            "type": "string",
+            "pattern": "^https://"
+          },
           "registers": {
-            "description": "Keys checked, or [\"all\"].",
+            "description": "Keys a person confirmed, or [\"all\"].",
             "type": "array",
             "minItems": 1,
+            "items": {
+              "type": "string"
+            }
+          },
+          "unreadable": {
+            "description": "Keys the device refused (Modbus exception), up to 50.",
+            "type": "array",
             "items": {
               "type": "string"
             }

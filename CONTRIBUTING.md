@@ -45,15 +45,28 @@ maps) into maps. When a vendor publishes a new revision, rerun the importer with
 
 ## Verify a device
 
-Read a few registers from a real device, compare them with what the display or the vendor software shows, then add
-an entry:
+The easy way is [proxus-mcp](https://github.com/proxusiiotplatform/proxus-mcp): connect it to your device, ask your
+AI assistant to verify the device's map, and confirm two values against the device's display when it asks. Its
+`verify_device_map` tool reads the map's registers (read-only), runs plausibility checks and gives you a link that
+opens a prefilled verification issue. A bot checks the report and opens a pull request that adds you to the map.
+
+Levels:
+
+| Level | Meaning |
+|---|---|
+| L1 | At least 90% of the map's registers answered |
+| L2 | L1, and the automatic checks passed (frequency in range, no garbage floats, counters do not run backwards) |
+| L3 | L2, and you matched at least two values with the device's display |
+
+You can also add an entry by hand:
 
 ```yaml
 verified:
   - by: your-github-name
     date: 2026-10-31
+    level: L3
     firmware: "1.03"          # if the device reports one
-    registers: [voltage_l1_n, active_power_total, import_active_energy]   # or [all]
+    registers: [voltage_l1_n, active_power_total]   # the values you compared, or [all]
     notes: Modbus TCP through a USR-TCP232 gateway, unit id 1
 ```
 

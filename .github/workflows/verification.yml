@@ -1,0 +1,93 @@
+name: verification
+
+# Turns a hardware verification issue into a pull request that adds the reporter to the map's verified list.
+# The issue body is untrusted input: it only reaches tools/verify_report.py as a file and is parsed as JSON
+# against a strict schema; nothing from it is interpolated into a shell command.
+on:
+  issues:
+    types: [opened, edited, labeled]
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
+concurrency:
+  group: verification-${{ github.event.issue.number }}
+  cancel-in-progress: false
+
+jobs:
+  report:
+    if: contains(github.event.issue.labels.*.name, 'verification') && github.event.issue.state == 'open'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pyyaml==6.0.2 jsonschema==4.23.0
+
+      - name: Check the report
+        id: check
+        env:
+          ISSUE_BODY: ${{ github.event.issue.body }}
+          AUTHOR: ${{ github.event.issue.user.login }}
+          ISSUE_URL: ${{ github.event.issue.html_url }}
+        run: |
+          printf '%s' "$ISSUE_BODY" > "$RUNNER_TEMP/body.md"
+          python3 tools/verify_report.py "$RUNNER_TEMP/body.md" --by "$AUTHOR" --report-url "$ISSUE_URL" \
+            --apply --summary "$RUNNER_TEMP/summary.md" || true
+
+      - name: Open the pull request
+        id: pr
+        if: steps.check.outputs.outcome == 'verified'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          NUMBER: ${{ github.event.issue.number }}
+          AUTHOR: ${{ github.event.issue.user.login }}
+          MAP_FILE: ${{ steps.check.outputs.map_file }}
+        run: |
+          python3 tools/maps.py catalog
+          branch="verification/issue-$NUMBER"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -B "$branch"
+          git add "$MAP_FILE" README.md
+          git commit -m "Record hardware verification from #$NUMBER"
+          git push --force origin "$branch"
+          {
+            echo "Adds @$AUTHOR's hardware verification to \`$MAP_FILE\`."
+            echo
+            cat "$RUNNER_TEMP/summary.md"
+            echo
+            echo "Closes #$NUMBER"
+          } > "$RUNNER_TEMP/pr.md"
+          url=$(gh pr list --head "$branch" --json url --jq '.[0].url')
+          if [ -z "$url" ]; then
+            url=$(gh pr create --head "$branch" --title "Hardware verification: $MAP_FILE" --body-file "$RUNNER_TEMP/pr.md")
+          fi
+          echo "url=$url" >> "$GITHUB_OUTPUT"
+
+      - name: Reply on the issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+          NUMBER: ${{ github.event.issue.number }}
+          OUTCOME: ${{ steps.check.outputs.outcome }}
+          PR_URL: ${{ steps.pr.outputs.url }}
+        run: |
+          {
+            if [ -f "$RUNNER_TEMP/summary.md" ]; then cat "$RUNNER_TEMP/summary.md"; else echo "The report could not be read."; fi
+            echo
+            case "$OUTCOME" in
+              verified) echo "Thank you! Pull request: $PR_URL. A maintainer merges it after a quick look." ;;
+              problem) echo "The device refused many of this map's registers, so the map likely needs a correction. A maintainer will look into it." ;;
+              stale) echo "The map's registers changed after this report. Please run verify_device_map again with the latest proxus-mcp." ;;
+              duplicate) echo "This verification is already recorded. Thanks anyway!" ;;
+              *) echo "The report did not pass the checks above. Run verify_device_map again and paste its report unchanged." ;;
+            esac
+          } > "$RUNNER_TEMP/comment.md"
+          gh issue comment "$NUMBER" --body-file "$RUNNER_TEMP/comment.md"
+          case "$OUTCOME" in
+            problem) gh issue edit "$NUMBER" --add-label map-problem ;;
+            stale|invalid|"") gh issue edit "$NUMBER" --add-label needs-new-report ;;
+          esac

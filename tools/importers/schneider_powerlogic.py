@@ -156,6 +156,14 @@ def emit(item: dict) -> str:
     return "  - {" + ", ".join(parts) + "}"
 
 
+def kept_verified(out: Path) -> str:
+    """The verified block of an existing map, so regenerating a map never drops hardware verifications."""
+    previous = out.read_text(encoding="utf-8") if out.exists() else ""
+    if "\nverified:\n" not in previous:
+        return ""
+    return previous[previous.index("\nverified:\n"):previous.index("\nregisters:\n")]
+
+
 def main(argv: list[str]) -> int:
     if len(argv) != 4:
         print(__doc__)
@@ -165,7 +173,7 @@ def main(argv: list[str]) -> int:
     head = header.read_text(encoding="utf-8").rstrip("\n")
     body = "\n".join(emit(r) for r in registers)
     out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_text(f"{head}\nvariants: [{', '.join(q(v) for v in variants)}]\nregisters:\n{body}\n", encoding="utf-8")
+    out.write_text(f"{head}\nvariants: [{', '.join(q(v) for v in variants)}]{kept_verified(out)}\nregisters:\n{body}\n", encoding="utf-8")
     print(f"{out}: {len(registers)} registers, variants {variants}, {stats}")
     return 0
 

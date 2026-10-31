@@ -1,0 +1,24 @@
+name: Hardware verification
+description: A report from reading a map's registers on a real device (proxus-mcp verify_device_map fills this in).
+title: "Verification: <map>"
+labels: [verification]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for checking a map on real hardware. A bot checks the report and, if it holds up, opens a pull
+        request that adds you to the map's `verified` list. The report contains check results only: no IP
+        addresses, host names or full serial numbers. Read it before you submit.
+  - type: textarea
+    id: report
+    attributes:
+      label: Report
+      description: The JSON report from verify_device_map. Please don't edit it by hand.
+      render: json
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes
+      description: Optional. Gateway, wiring mode, anything that looked odd.
