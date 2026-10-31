@@ -64,7 +64,10 @@ jobs:
           } > "$RUNNER_TEMP/pr.md"
           url=$(gh pr list --head "$branch" --json url --jq '.[0].url')
           if [ -z "$url" ]; then
-            url=$(gh pr create --head "$branch" --title "Hardware verification: $MAP_FILE" --body-file "$RUNNER_TEMP/pr.md")
+            # Needs "Allow GitHub Actions to create pull requests" in the repository settings; without it a
+            # maintainer opens the pull request from the pushed branch.
+            url=$(gh pr create --head "$branch" --title "Hardware verification: $MAP_FILE" --body-file "$RUNNER_TEMP/pr.md") ||
+              url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/compare/main...$branch?expand=1 (branch ready; a maintainer opens the pull request)"
           fi
           echo "url=$url" >> "$GITHUB_OUTPUT"
 
