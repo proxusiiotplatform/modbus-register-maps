@@ -29,7 +29,7 @@ two can never disagree.
 | Schneider Electric | [ATV600](devices/schneider-electric/atv600.yaml) | vfd | 1879 | not yet |
 | Schneider Electric | [ATV900](devices/schneider-electric/atv900.yaml) | vfd | 1911 | not yet |
 | Schneider Electric | [PM5100/PM5300](devices/schneider-electric/pm5100-pm5300.yaml) | power-analyzer | 877 | not yet |
-| Schneider Electric | [PM5500/PM5600/PM5700](devices/schneider-electric/pm5500-pm5600-pm5700.yaml) | power-analyzer | 3108 | not yet |
+| Schneider Electric | [PM5500/PM5600/PM5700](devices/schneider-electric/pm5500-pm5600-pm5700.yaml) | power-analyzer | 3108 | L3, 1 person |
 | Siemens | [PAC3200](devices/siemens/pac3200.yaml) | power-analyzer | 151 | not yet |
 | Siemens | [PAC4200](devices/siemens/pac4200.yaml) | power-analyzer | 222 | not yet |
 <!-- catalog:end -->

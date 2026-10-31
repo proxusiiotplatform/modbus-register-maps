@@ -22,6 +22,14 @@ sources:
     sha256: 312c48592d204d41a259743c6d94acb94dcc8d1ab2cb2f77522f7c8dccb2423b
     notes: XLSX attachment of the support article. Schneider advises checking the firmware package for a newer list.
 variants: ["PM5650", "PM5570", "PM5580", "PM5660", "PM5661", "PM5760", "PM5761", "PM5560", "PM5561", "PM5563"]
+verified:
+  - by: proxusiiotplatform
+    date: 2026-10-31
+    level: L3
+    model: "PM5560"
+    tool: "proxus-mcp 0.1.0-beta.7"
+    report: https://github.com/proxusiiotplatform/modbus-register-maps/issues/1
+    registers: [voltage_a_b, frequency]
 registers:
   - {key: meter_name, name: "Meter Name", group: product_and_features, table: holding, address: 29, type: string, length: 20, access: r, notes: "Change it through the meter's setup commands; writing the register directly is refused."}
   - {key: meter_model, name: "Meter Model", group: product_and_features, table: holding, address: 49, type: string, length: 20, access: r, notes: "Change it through the meter's setup commands; writing the register directly is refused."}
