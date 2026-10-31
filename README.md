@@ -13,6 +13,7 @@ two can never disagree.
 <!-- catalog:start -->
 | Vendor | Model | Category | Registers | Hardware-verified |
 |---|---|---|---|---|
+| ABB | [B23/B24](devices/abb/b23-b24.yaml) | energy-meter | 121 | not yet |
 | Eastron | [SDM120-Modbus](devices/eastron/sdm120-modbus.yaml) | energy-meter | 32 | not yet |
 | Eastron | [SDM630-Modbus](devices/eastron/sdm630-modbus.yaml) | energy-meter | 97 | not yet |
 | Fronius | [Primo GEN24 Plus/Symo GEN24 Plus](devices/fronius/primo-gen24-plus-symo-gen24-plus.yaml) | inverter | 224 | not yet |
@@ -29,6 +30,7 @@ two can never disagree.
 | Schneider Electric | [ATV900](devices/schneider-electric/atv900.yaml) | vfd | 1911 | not yet |
 | Schneider Electric | [PM5100/PM5300](devices/schneider-electric/pm5100-pm5300.yaml) | power-analyzer | 877 | not yet |
 | Schneider Electric | [PM5500/PM5600/PM5700](devices/schneider-electric/pm5500-pm5600-pm5700.yaml) | power-analyzer | 3108 | not yet |
+| Siemens | [PAC3200](devices/siemens/pac3200.yaml) | power-analyzer | 151 | not yet |
 <!-- catalog:end -->
 
 "Hardware-verified" means someone read the registers from a real device and recorded it under `verified`.

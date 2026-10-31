@@ -1,0 +1,175 @@
+# Transcribed from Siemens' manual; not yet checked against a device.
+schema_version: 1
+vendor: Siemens
+model: PAC3200
+aliases: [SENTRON PAC3200, 7KM2112-0BA00-3AA0, 7KM2111-1BA00-3AA0]
+category: power-analyzer
+summary: SENTRON PAC3200 power monitoring device; measurements are 32-bit floats, energy counters 64-bit floats.
+connection:
+  interfaces: [tcp, rtu]
+  default_byte_order: ABCD
+  notes:
+    - Addresses are the manual's offsets, sent unchanged (the convention mbmd's working PAC2200 driver uses).
+    - Function code 3 or 4 reads the same registers; reading from the middle of a multi-register value is refused.
+    - Modbus TCP is built in; Modbus RTU needs the PAC RS485 expansion module.
+    - Read the identification block (64001, 27 registers) in a single request.
+sources:
+  - title: SENTRON PAC3200 Power Monitoring Device Manual
+    publisher: Siemens
+    document_id: A5E01168664B-04
+    url: https://support.industry.siemens.com/cs/ww/en/view/26504150
+    accessed: 2026-10-31
+    sha256: b9efef1f28f8588d3f9b9ba04754e4914850fb0ec74373955d199d8f6b3de187
+    notes: Section 3.9, tables 3-6 (measured variables), 3-11 (settings) and 3-23 (I&M 0).
+registers:
+  - {key: voltage_va_n, name: "Voltage Va-n", group: instantaneous, table: holding, address: 1, type: float32, unit: "V", access: r}
+  - {key: voltage_vb_n, name: "Voltage Vb-n", group: instantaneous, table: holding, address: 3, type: float32, unit: "V", access: r}
+  - {key: voltage_vc_n, name: "Voltage Vc-n", group: instantaneous, table: holding, address: 5, type: float32, unit: "V", access: r}
+  - {key: voltage_va_b, name: "Voltage Va-b", group: instantaneous, table: holding, address: 7, type: float32, unit: "V", access: r}
+  - {key: voltage_vb_c, name: "Voltage Vb-c", group: instantaneous, table: holding, address: 9, type: float32, unit: "V", access: r}
+  - {key: voltage_vc_a, name: "Voltage Vc-a", group: instantaneous, table: holding, address: 11, type: float32, unit: "V", access: r}
+  - {key: current_a, name: "Current a", group: instantaneous, table: holding, address: 13, type: float32, unit: "A", access: r}
+  - {key: current_b, name: "Current b", group: instantaneous, table: holding, address: 15, type: float32, unit: "A", access: r}
+  - {key: current_c, name: "Current c", group: instantaneous, table: holding, address: 17, type: float32, unit: "A", access: r}
+  - {key: apparent_power_a, name: "Apparent Power a", group: instantaneous, table: holding, address: 19, type: float32, unit: "VA", access: r}
+  - {key: apparent_power_b, name: "Apparent Power b", group: instantaneous, table: holding, address: 21, type: float32, unit: "VA", access: r}
+  - {key: apparent_power_c, name: "Apparent Power c", group: instantaneous, table: holding, address: 23, type: float32, unit: "VA", access: r}
+  - {key: active_power_a, name: "Active Power a", group: instantaneous, table: holding, address: 25, type: float32, unit: "W", access: r}
+  - {key: active_power_b, name: "Active Power b", group: instantaneous, table: holding, address: 27, type: float32, unit: "W", access: r}
+  - {key: active_power_c, name: "Active Power c", group: instantaneous, table: holding, address: 29, type: float32, unit: "W", access: r}
+  - {key: reactive_power_a, name: "Reactive Power a", group: instantaneous, table: holding, address: 31, type: float32, unit: "var", access: r}
+  - {key: reactive_power_b, name: "Reactive Power b", group: instantaneous, table: holding, address: 33, type: float32, unit: "var", access: r}
+  - {key: reactive_power_c, name: "Reactive Power c", group: instantaneous, table: holding, address: 35, type: float32, unit: "var", access: r}
+  - {key: power_factor_a, name: "Power Factor a", group: instantaneous, table: holding, address: 37, type: float32, access: r}
+  - {key: power_factor_b, name: "Power Factor b", group: instantaneous, table: holding, address: 39, type: float32, access: r}
+  - {key: power_factor_c, name: "Power Factor c", group: instantaneous, table: holding, address: 41, type: float32, access: r}
+  - {key: thd_r_voltage_a, name: "THD-R Voltage a", group: instantaneous, table: holding, address: 43, type: float32, unit: "%", access: r}
+  - {key: thd_r_voltage_b, name: "THD-R Voltage b", group: instantaneous, table: holding, address: 45, type: float32, unit: "%", access: r}
+  - {key: thd_r_voltage_c, name: "THD-R Voltage c", group: instantaneous, table: holding, address: 47, type: float32, unit: "%", access: r}
+  - {key: thd_r_current_a, name: "THD-R Current a", group: instantaneous, table: holding, address: 49, type: float32, unit: "%", access: r}
+  - {key: thd_r_current_b, name: "THD-R Current b", group: instantaneous, table: holding, address: 51, type: float32, unit: "%", access: r}
+  - {key: thd_r_current_c, name: "THD-R Current c", group: instantaneous, table: holding, address: 53, type: float32, unit: "%", access: r}
+  - {key: frequency, name: "Frequency", group: instantaneous, table: holding, address: 55, type: float32, unit: "Hz", access: r}
+  - {key: average_voltage_vph_n, name: "Average Voltage Vph-n", group: instantaneous, table: holding, address: 57, type: float32, unit: "V", access: r}
+  - {key: average_voltage_vph_ph, name: "Average Voltage Vph-ph", group: instantaneous, table: holding, address: 59, type: float32, unit: "V", access: r}
+  - {key: average_current, name: "Average Current", group: instantaneous, table: holding, address: 61, type: float32, unit: "A", access: r}
+  - {key: total_apparent_power, name: "Total Apparent Power", group: instantaneous, table: holding, address: 63, type: float32, unit: "VA", access: r}
+  - {key: total_active_power, name: "Total Active Power", group: instantaneous, table: holding, address: 65, type: float32, unit: "W", access: r}
+  - {key: total_reactive_power, name: "Total Reactive Power", group: instantaneous, table: holding, address: 67, type: float32, unit: "var", access: r}
+  - {key: total_power_factor, name: "Total Power Factor", group: instantaneous, table: holding, address: 69, type: float32, access: r}
+  - {key: amplitude_unbalance_voltage, name: "Amplitude Unbalance - Voltage", group: instantaneous, table: holding, address: 71, type: float32, unit: "%", access: r}
+  - {key: amplitude_unbalance_current, name: "Amplitude Unbalance - Current", group: instantaneous, table: holding, address: 73, type: float32, unit: "%", access: r}
+  - {key: maximum_voltage_va_n, name: "Maximum Voltage Va-n", group: instantaneous, table: holding, address: 75, type: float32, unit: "V", access: r}
+  - {key: maximum_voltage_vb_n, name: "Maximum Voltage Vb-n", group: instantaneous, table: holding, address: 77, type: float32, unit: "V", access: r}
+  - {key: maximum_voltage_vc_n, name: "Maximum Voltage Vc-n", group: instantaneous, table: holding, address: 79, type: float32, unit: "V", access: r}
+  - {key: max_voltage_va_b, name: "Max. Voltage Va-b", group: instantaneous, table: holding, address: 81, type: float32, unit: "V", access: r}
+  - {key: max_voltage_vb_c, name: "Max. Voltage Vb-c", group: instantaneous, table: holding, address: 83, type: float32, unit: "V", access: r}
+  - {key: max_voltage_vc_a, name: "Max. Voltage Vc-a", group: instantaneous, table: holding, address: 85, type: float32, unit: "V", access: r}
+  - {key: maximum_current_a, name: "Maximum Current a", group: instantaneous, table: holding, address: 87, type: float32, unit: "A", access: r}
+  - {key: maximum_current_b, name: "Maximum Current b", group: instantaneous, table: holding, address: 89, type: float32, unit: "A", access: r}
+  - {key: maximum_current_c, name: "Maximum Current c", group: instantaneous, table: holding, address: 91, type: float32, unit: "A", access: r}
+  - {key: maximum_apparent_power_a, name: "Maximum Apparent Power a", group: instantaneous, table: holding, address: 93, type: float32, unit: "VA", access: r}
+  - {key: maximum_apparent_power_b, name: "Maximum Apparent Power b", group: instantaneous, table: holding, address: 95, type: float32, unit: "VA", access: r}
+  - {key: maximum_apparent_power_c, name: "Maximum Apparent Power c", group: instantaneous, table: holding, address: 97, type: float32, unit: "VA", access: r}
+  - {key: maximum_active_power_a, name: "Maximum Active Power a", group: instantaneous, table: holding, address: 99, type: float32, unit: "W", access: r}
+  - {key: maximum_active_power_b, name: "Maximum Active Power b", group: instantaneous, table: holding, address: 101, type: float32, unit: "W", access: r}
+  - {key: maximum_active_power_c, name: "Maximum Active Power c", group: instantaneous, table: holding, address: 103, type: float32, unit: "W", access: r}
+  - {key: maximum_reactive_power_a, name: "Maximum Reactive Power a", group: instantaneous, table: holding, address: 105, type: float32, unit: "var", access: r}
+  - {key: maximum_reactive_power_b, name: "Maximum Reactive Power b", group: instantaneous, table: holding, address: 107, type: float32, unit: "var", access: r}
+  - {key: maximum_reactive_power_c, name: "Maximum Reactive Power c", group: instantaneous, table: holding, address: 109, type: float32, unit: "var", access: r}
+  - {key: maximum_power_factor_a, name: "Maximum Power Factor a", group: instantaneous, table: holding, address: 111, type: float32, unit: "0 ... 1", access: r}
+  - {key: maximum_power_factor_b, name: "Maximum Power Factor b", group: instantaneous, table: holding, address: 113, type: float32, unit: "0 ... 1", access: r}
+  - {key: maximum_power_factor_c, name: "Maximum Power Factor c", group: instantaneous, table: holding, address: 115, type: float32, unit: "0 ... 1", access: r}
+  - {key: maximum_thd_r_voltage_a, name: "Maximum THD-R Voltage a", group: instantaneous, table: holding, address: 117, type: float32, unit: "%", access: r}
+  - {key: maximum_thd_r_voltage_b, name: "Maximum THD-R Voltage b", group: instantaneous, table: holding, address: 119, type: float32, unit: "%", access: r}
+  - {key: maximum_thd_r_voltage_c, name: "Maximum THD-R Voltage c", group: instantaneous, table: holding, address: 121, type: float32, unit: "%", access: r}
+  - {key: maximum_thd_r_current_a, name: "Maximum THD-R Current a", group: instantaneous, table: holding, address: 123, type: float32, unit: "%", access: r}
+  - {key: maximum_thd_r_current_b, name: "Maximum THD-R Current b", group: instantaneous, table: holding, address: 125, type: float32, unit: "%", access: r}
+  - {key: maximum_thd_r_current_c, name: "Maximum THD-R Current c", group: instantaneous, table: holding, address: 127, type: float32, unit: "%", access: r}
+  - {key: max_frequency, name: "Max. Frequency", group: instantaneous, table: holding, address: 129, type: float32, unit: "Hz", access: r}
+  - {key: max_average_voltage_vph_n, name: "Max. Average Voltage Vph-n", group: instantaneous, table: holding, address: 131, type: float32, unit: "V", access: r}
+  - {key: max_average_voltage_vph_ph, name: "Max. Average Voltage Vph-ph", group: instantaneous, table: holding, address: 133, type: float32, unit: "V", access: r}
+  - {key: max_average_current, name: "Max. Average Current", group: instantaneous, table: holding, address: 135, type: float32, unit: "A", access: r}
+  - {key: max_total_apparent_power, name: "Max. Total Apparent Power", group: instantaneous, table: holding, address: 137, type: float32, unit: "VA", access: r}
+  - {key: max_total_active_power, name: "Max. Total Active Power", group: instantaneous, table: holding, address: 139, type: float32, unit: "W", access: r}
+  - {key: max_total_reactive_power, name: "Max. Total Reactive Power", group: instantaneous, table: holding, address: 141, type: float32, unit: "var", access: r}
+  - {key: maximum_total_power_factor, name: "Maximum Total Power Factor", group: instantaneous, table: holding, address: 143, type: float32, access: r}
+  - {key: minimum_voltage_va_n, name: "Minimum Voltage Va-n", group: instantaneous, table: holding, address: 145, type: float32, unit: "V", access: r}
+  - {key: minimum_voltage_vb_n, name: "Minimum Voltage Vb-n", group: instantaneous, table: holding, address: 147, type: float32, unit: "V", access: r}
+  - {key: minimum_voltage_vc_n, name: "Minimum Voltage Vc-n", group: instantaneous, table: holding, address: 149, type: float32, unit: "V", access: r}
+  - {key: min_voltage_va_b, name: "Min. Voltage Va-b", group: instantaneous, table: holding, address: 151, type: float32, unit: "V", access: r}
+  - {key: min_voltage_vb_c, name: "Min. Voltage Vb-c", group: instantaneous, table: holding, address: 153, type: float32, unit: "V", access: r}
+  - {key: min_voltage_vc_a, name: "Min. Voltage Vc-a", group: instantaneous, table: holding, address: 155, type: float32, unit: "V", access: r}
+  - {key: minimum_current_a, name: "Minimum Current a", group: instantaneous, table: holding, address: 157, type: float32, unit: "A", access: r}
+  - {key: minimum_current_b, name: "Minimum Current b", group: instantaneous, table: holding, address: 159, type: float32, unit: "A", access: r}
+  - {key: minimum_current_c, name: "Minimum Current c", group: instantaneous, table: holding, address: 161, type: float32, unit: "A", access: r}
+  - {key: minimum_apparent_power_a, name: "Minimum Apparent Power a", group: instantaneous, table: holding, address: 163, type: float32, unit: "VA", access: r}
+  - {key: minimum_apparent_power_b, name: "Minimum Apparent Power b", group: instantaneous, table: holding, address: 165, type: float32, unit: "VA", access: r}
+  - {key: minimum_apparent_power_c, name: "Minimum Apparent Power c", group: instantaneous, table: holding, address: 167, type: float32, unit: "VA", access: r}
+  - {key: minimum_active_power_a, name: "Minimum Active Power a", group: instantaneous, table: holding, address: 169, type: float32, unit: "W", access: r}
+  - {key: minimum_active_power_b, name: "Minimum Active Power b", group: instantaneous, table: holding, address: 171, type: float32, unit: "W", access: r}
+  - {key: minimum_active_power_c, name: "Minimum Active Power c", group: instantaneous, table: holding, address: 173, type: float32, unit: "W", access: r}
+  - {key: minimum_reactive_power_a, name: "Minimum Reactive Power a", group: instantaneous, table: holding, address: 175, type: float32, unit: "var", access: r}
+  - {key: minimum_reactive_power_b, name: "Minimum Reactive Power b", group: instantaneous, table: holding, address: 177, type: float32, unit: "var", access: r}
+  - {key: minimum_reactive_power_c, name: "Minimum Reactive Power c", group: instantaneous, table: holding, address: 179, type: float32, unit: "var", access: r}
+  - {key: minimum_power_factor_a, name: "Minimum Power Factor a", group: instantaneous, table: holding, address: 181, type: float32, access: r}
+  - {key: minimum_power_factor_b, name: "Minimum Power Factor b", group: instantaneous, table: holding, address: 183, type: float32, access: r}
+  - {key: minimum_power_factor_c, name: "Minimum Power Factor c", group: instantaneous, table: holding, address: 185, type: float32, access: r}
+  - {key: min_frequency, name: "Min. Frequency", group: instantaneous, table: holding, address: 187, type: float32, unit: "Hz", access: r}
+  - {key: min_average_voltage_vph_n, name: "Min. Average Voltage Vph-n", group: instantaneous, table: holding, address: 189, type: float32, unit: "V", access: r}
+  - {key: min_average_voltage_vph_ph, name: "Min. Average Voltage Vph-ph", group: instantaneous, table: holding, address: 191, type: float32, unit: "V", access: r}
+  - {key: min_average_current, name: "Min. Average Current", group: instantaneous, table: holding, address: 193, type: float32, unit: "A", access: r}
+  - {key: min_total_apparent_power, name: "Min. Total Apparent Power", group: instantaneous, table: holding, address: 195, type: float32, unit: "VA", access: r}
+  - {key: min_total_active_power, name: "Min. Total Active Power", group: instantaneous, table: holding, address: 197, type: float32, unit: "W", access: r}
+  - {key: min_total_reactive_power, name: "Min. Total Reactive Power", group: instantaneous, table: holding, address: 199, type: float32, unit: "var", access: r}
+  - {key: minimum_total_power_factor, name: "Minimum Total Power Factor", group: status, table: holding, address: 201, type: float32, unit: "var", access: r}
+  - {key: limit_violations, name: "Limit Violations*", group: status, table: holding, address: 203, type: uint32, access: r}
+  - {key: device_diagnostics_and_device_status, name: "Device diagnostics and device status", group: status, table: holding, address: 205, type: bitfield, length: 2, access: r, notes: "Bytes: system status, device status, diagnostics; see the manual."}
+  - {key: status_of_the_digital_outputs, name: "Status of the digital outputs*", group: status, table: holding, address: 207, type: uint32, access: r}
+  - {key: status_of_the_digital_inputs, name: "Status of the digital inputs*", group: status, table: holding, address: 209, type: uint32, access: r}
+  - {key: active_tariff, name: "Active Tariff", group: status, table: holding, address: 211, type: uint32, access: r}
+  - {key: working_hours_counter, name: "Working hours counter", group: status, table: holding, address: 213, type: uint32, unit: "s", access: rw}
+  - {key: universal_counter, name: "Universal counter", group: status, table: holding, address: 215, type: uint32, access: rw}
+  - {key: relevant_parameter_changes_counter, name: "Relevant Parameter Changes Counter", group: status, table: holding, address: 217, type: uint32, access: r}
+  - {key: counter_all_parameter_changes, name: "Counter All Parameter Changes", group: status, table: holding, address: 219, type: uint32, access: r}
+  - {key: counter_limit_violations, name: "Counter limit violations", group: status, table: holding, address: 221, type: uint32, access: r}
+  - {key: demand_active_power_import, name: "Demand Active Power - Import", group: demand, table: holding, address: 501, type: float32, unit: "W", access: r}
+  - {key: demand_reactive_power_import, name: "Demand Reactive Power - Import", group: demand, table: holding, address: 503, type: float32, unit: "var", access: r}
+  - {key: demand_active_power_export, name: "Demand Active Power - Export", group: demand, table: holding, address: 505, type: float32, unit: "W", access: r}
+  - {key: demand_reactive_power_export, name: "Demand Reactive Power - Export", group: demand, table: holding, address: 507, type: float32, unit: "var", access: r}
+  - {key: maximum_active_power_reading_during_the_period, name: "Maximum Active Power Reading during the period", group: demand, table: holding, address: 509, type: float32, unit: "W", access: r}
+  - {key: minimum_active_power_reading_during_the_period, name: "Minimum active power reading during the period", group: demand, table: holding, address: 511, type: float32, unit: "W", access: r}
+  - {key: maximum_reactive_power_reading_during_the_period, name: "Maximum Reactive Power Reading during the period", group: demand, table: holding, address: 513, type: float32, unit: "var", access: r}
+  - {key: minimum_reactive_power_reading_during_the_period, name: "Minimum Reactive Power Reading during the period", group: demand, table: holding, address: 515, type: float32, unit: "var", access: r}
+  - {key: demand_period, name: "Demand Period", group: demand, table: holding, address: 517, type: uint32, unit: "s", access: r}
+  - {key: time_since_start_of_the_active_demand_period, name: "Time Since Start of the active demand period", group: demand, table: holding, address: 519, type: uint32, unit: "s", access: r}
+  - {key: active_energy_import_tariff_1, name: "Active Energy Import Tariff 1", group: energy, table: holding, address: 801, type: float64, unit: "Wh", access: rw}
+  - {key: active_energy_import_tariff_2, name: "Active Energy Import Tariff 2", group: energy, table: holding, address: 805, type: float64, unit: "Wh", access: rw}
+  - {key: active_energy_export_tariff_1, name: "Active Energy Export Tariff 1", group: energy, table: holding, address: 809, type: float64, unit: "Wh", access: rw}
+  - {key: active_energy_export_tariff_2, name: "Active Energy Export Tariff 2", group: energy, table: holding, address: 813, type: float64, unit: "Wh", access: rw}
+  - {key: reactive_energy_import_tariff_1, name: "Reactive Energy Import Tariff 1", group: energy, table: holding, address: 817, type: float64, unit: "varh", access: rw}
+  - {key: reactive_energy_import_tariff_2, name: "Reactive Energy Import Tariff 2", group: energy, table: holding, address: 821, type: float64, unit: "varh", access: rw}
+  - {key: reactive_energy_export_tariff_1, name: "Reactive Energy Export Tariff 1", group: energy, table: holding, address: 825, type: float64, unit: "varh", access: rw}
+  - {key: reactive_energy_export_tariff_2, name: "Reactive Energy Export Tariff 2", group: energy, table: holding, address: 829, type: float64, unit: "varh", access: rw}
+  - {key: apparent_energy_tariff_1, name: "Apparent Energy Tariff 1", group: energy, table: holding, address: 833, type: float64, unit: "VAh", access: rw}
+  - {key: apparent_energy_tariff_2, name: "Apparent Energy Tariff 2", group: energy, table: holding, address: 837, type: float64, unit: "VAh", access: rw}
+  - {key: connection_type, name: "Connection type", group: settings, table: holding, address: 50001, type: uint32, access: rw, values: {"0": "3P4W", "1": "3P3W", "2": "3P4WB", "3": "3P3WB", "4": "1P2W"}}
+  - {key: voltage_transformers_used, name: "Voltage measurement using voltage transformers", group: settings, table: holding, address: 50003, type: uint32, access: rw, values: {"0": "No", "1": "Yes"}}
+  - {key: vt_primary_voltage, name: "Primary voltage", group: settings, table: holding, address: 50005, type: uint32, unit: "V", access: rw}
+  - {key: vt_secondary_voltage, name: "Secondary voltage", group: settings, table: holding, address: 50007, type: uint32, unit: "V", access: rw}
+  - {key: ct_primary_current, name: "Primary current", group: settings, table: holding, address: 50011, type: uint32, unit: "A", access: rw}
+  - {key: ct_secondary_current, name: "Secondary current", group: settings, table: holding, address: 50013, type: uint32, unit: "A", access: rw, notes: "1 A or 5 A."}
+  - {key: invert_ct_polarity, name: "Invert CT polarity", group: settings, table: holding, address: 50015, type: uint32, access: rw, values: {"0": "No", "1": "Yes"}}
+  - {key: zero_point_suppression, name: "Zero point suppression level", group: settings, table: holding, address: 50019, type: float32, unit: "%", access: rw, notes: "Percent of rated current, 0.0 to 10.0."}
+  - {key: demand_period_setting, name: "Demand period", group: settings, table: holding, address: 50021, type: uint32, unit: "min", access: rw, notes: "1 to 60."}
+  - {key: demand_synchronization, name: "Demand synchronization", group: settings, table: holding, address: 50023, type: uint32, access: rw, values: {"0": "None", "1": "Via bus", "2": "Via the digital input"}}
+  - {key: im0_manufacturer_id, name: "Manufacturer ID", group: identification, table: holding, address: 64001, type: uint16, access: r, notes: "42 for Siemens. Read the I&M 0 block (64001, 27 registers) in one request."}
+  - {key: im0_order_number, name: "Order number", group: identification, table: holding, address: 64002, type: string, length: 10, access: r}
+  - {key: im0_serial_number, name: "Serial number", group: identification, table: holding, address: 64012, type: string, length: 8, access: r}
+  - {key: im0_hardware_version, name: "Hardware version", group: identification, table: holding, address: 64020, type: uint16, access: r}
+  - {key: im0_firmware_version, name: "Firmware version", group: identification, table: holding, address: 64021, type: raw, length: 2, access: r, notes: "One character and three unsigned bytes, e.g. V 2.1.3."}
+  - {key: im0_change_counter, name: "Counter for changes", group: identification, table: holding, address: 64023, type: uint16, access: r}
+  - {key: im0_profile_id, name: "Profile ID", group: identification, table: holding, address: 64024, type: uint16, access: r}
+  - {key: im0_specific_profile_id, name: "Specific profile ID", group: identification, table: holding, address: 64025, type: uint16, access: r}
+  - {key: im0_version, name: "Version of the I&M data", group: identification, table: holding, address: 64026, type: uint16, access: r, notes: "Two bytes: major, minor."}
+  - {key: im0_supported, name: "Supported I&M data", group: identification, table: holding, address: 64027, type: uint16, access: r}
