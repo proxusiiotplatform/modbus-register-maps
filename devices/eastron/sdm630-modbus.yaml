@@ -22,7 +22,9 @@ sources:
     publisher: Eastron
     version: V1.8
     url: https://communityarchive.victronenergy.com/storage/attachments/sdm630-modbus-protocol.pdf
-    notes: Copy hosted by the Victron community archive.
+    accessed: 2026-10-31
+    sha256: 3968e14300023271c4dcd1acf450b8a1bc06cf961b2231d2b448e8e8c1fc57ee
+    notes: Copy hosted by the Victron community archive; Eastron publishes no copy that can be downloaded without a request.
 registers:
   - key: voltage_l1_n
     name: "Phase 1 line to neutral voltage"

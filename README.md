@@ -15,6 +15,12 @@ two can never disagree.
 |---|---|---|---|---|
 | Eastron | [SDM120-Modbus](devices/eastron/sdm120-modbus.yaml) | energy-meter | 32 | not yet |
 | Eastron | [SDM630-Modbus](devices/eastron/sdm630-modbus.yaml) | energy-meter | 97 | not yet |
+| Schneider Electric | [ATV320](devices/schneider-electric/atv320.yaml) | vfd | 1071 | not yet |
+| Schneider Electric | [ATV340](devices/schneider-electric/atv340.yaml) | vfd | 1741 | not yet |
+| Schneider Electric | [ATV600](devices/schneider-electric/atv600.yaml) | vfd | 1879 | not yet |
+| Schneider Electric | [ATV900](devices/schneider-electric/atv900.yaml) | vfd | 1911 | not yet |
+| Schneider Electric | [PM5100/PM5300](devices/schneider-electric/pm5100-pm5300.yaml) | power-analyzer | 877 | not yet |
+| Schneider Electric | [PM5500/PM5600/PM5700](devices/schneider-electric/pm5500-pm5600-pm5700.yaml) | power-analyzer | 3108 | not yet |
 <!-- catalog:end -->
 
 "Hardware-verified" means someone read the registers from a real device and recorded it under `verified`.
@@ -68,6 +74,15 @@ lets AI assistants such as Claude read Modbus devices. With a map at hand you ca
 Adding a device takes one YAML file and a pull request; a check runs on every pull request and explains anything
 that needs fixing. See [CONTRIBUTING.md](CONTRIBUTING.md). No device of your own? Ask for one with a
 [device request](../../issues/new?template=device-request.yml).
+
+## Corrections and removal requests
+
+Maps record facts (addresses, data types, units) in this project's own format and words, with a link to the
+document they come from. Vendor documents themselves are never stored here.
+
+Found a wrong register? Open an issue or a pull request with the source or a reading that shows it. If you represent
+a manufacturer and want a map corrected, linked to a newer document or removed, open an issue or contact the
+maintainers through the repository owner's GitHub profile; requests are handled within five working days.
 
 ## Licence
 

@@ -28,6 +28,7 @@ REGISTER_COUNT = {
     "uint32": 2, "int32": 2, "float32": 2,
     "uint64": 4, "int64": 4, "float64": 4,
 }
+LENGTH_TYPES = ("string", "bitfield", "raw")
 REFERENCE_PREFIX = {"coil": 0, "discrete_input": 1, "input": 3, "holding": 4}
 PROXUS_MCP_PREFIX = {"coil": "coil", "discrete_input": "di", "input": "ir", "holding": "hr"}
 FUNCTION_CODE = {"coil": 1, "discrete_input": 2, "input": 4, "holding": 3}
@@ -38,7 +39,7 @@ def slug(text: str) -> str:
 
 
 def register_count(reg: dict) -> int:
-    return reg["length"] if reg["type"] == "string" else REGISTER_COUNT[reg["type"]]
+    return reg["length"] if reg["type"] in LENGTH_TYPES else REGISTER_COUNT[reg["type"]]
 
 
 def reference(table: str, address: int) -> str:
@@ -64,6 +65,11 @@ def _construct_mapping(loader, node, deep=False):
 
 
 StrictLoader.add_constructor(yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG, _construct_mapping)
+# Keep dates as the strings the schema describes instead of datetime.date objects.
+StrictLoader.yaml_implicit_resolvers = {
+    ch: [(tag, rx) for tag, rx in resolvers if tag != "tag:yaml.org,2002:timestamp"]
+    for ch, resolvers in yaml.SafeLoader.yaml_implicit_resolvers.items()
+}
 
 
 def load(path: Path) -> dict:
@@ -88,7 +94,7 @@ def check_device(path: Path, doc: dict, validator: jsonschema.Draft202012Validat
     if rel != expected:
         errors.append(f"{rel}: file should be {expected} (vendor and model, lower case, hyphenated)")
 
-    modes = set(doc.get("wiring_modes", []))
+    modes = set(doc.get("wiring_modes", [])) | set(doc.get("variants", []))
     keys: set[str] = set()
     spans: dict[str, list[tuple[int, int, str]]] = {}
     for reg in doc["registers"]:
@@ -102,7 +108,7 @@ def check_device(path: Path, doc: dict, validator: jsonschema.Draft202012Validat
         spans.setdefault(reg["table"], []).append((reg["address"], reg["address"] + count, key))
         unknown = set(reg.get("applies_to", [])) - modes
         if unknown:
-            errors.append(f"{rel}: {key}: applies_to names {sorted(unknown)}, not listed in wiring_modes")
+            errors.append(f"{rel}: {key}: applies_to names {sorted(unknown)}, not listed in wiring_modes or variants")
         if "values" in reg and reg["type"] == "string":
             errors.append(f"{rel}: {key}: a string register cannot list values")
 
@@ -182,7 +188,7 @@ def enrich(doc: dict) -> dict:
         item["address_hex"] = f"0x{reg['address']:04X}"
         item["function_code"] = FUNCTION_CODE[reg["table"]]
         item["proxus_mcp_address"] = f"{PROXUS_MCP_PREFIX[reg['table']]}:{reg['address']}"
-        if count > 1 and reg["type"] != "string":
+        if count > 1 and reg["type"] not in LENGTH_TYPES:
             item.setdefault("byte_order", default_order)
         registers.append(item)
     out = dict(doc)

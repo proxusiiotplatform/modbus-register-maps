@@ -19,6 +19,8 @@ sources:
     publisher: Eastron
     version: V2.4
     url: https://cdn.shopify.com/s/files/1/0418/3749/4423/files/Eastron_SDM120_Sereis_Electricity_Meters_MODBUS_Protocol.pdf
+    accessed: 2026-10-31
+    sha256: 9353b6813b2de3bcc85414988c93dee3177d655168123ff5ee194908b30d3f0c
     notes: Copy hosted by an Eastron reseller.
 registers:
   - key: voltage
