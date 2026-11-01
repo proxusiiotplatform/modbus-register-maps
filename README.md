@@ -1,8 +1,10 @@
-# Modbus Register Maps
+# <img src="docs/brand/mark.svg" width="40" height="40" align="top" alt=""> Modbus Register Maps
 
 Open, machine-readable Modbus register maps for energy meters, inverters, drives and other field devices.
 Each device is one YAML file with the address, data type, byte order, unit and scale of every register, and the
 document it was transcribed from.
+
+![Modbus Register Maps: every register, with its source](docs/brand/social-preview.png)
 
 Vendor manuals bury this in PDF tables with mixed addressing conventions (30001, 0x0000, "register 1"). Here
 every address is the zero-based value sent on the wire, and the 30001-style reference is derived from it, so the
